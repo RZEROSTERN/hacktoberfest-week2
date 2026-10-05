@@ -84,6 +84,30 @@ class ShippedContentTest {
         }
     }
 
+    // setup_adult_notice is left out on purpose: it is the safety rule itself ("never pick or touch
+    // anything"), so it names the forbidden verbs in a prohibition.
+    @Test
+    fun `texts read aloud to children are safe`() {
+        listOf("src/main/res/values/strings.xml", "src/main/res/values-es/strings.xml").forEach { path ->
+            listOf(
+                "speech_hunt_ready", "speech_summary", "hunt_tap_hint", "hunt_wait_hint", "verify_checking_hint",
+                "summary_title", "hunt_leave_body",
+            ).forEach { name ->
+                val text = stringValue(path, name)
+                assertTrue(
+                    "$name in $path must not tell a child to do anything unsafe: $text",
+                    !validator.containsUnsafeInstruction(text),
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `the invitation always mentions going with an adult`() {
+        assertTrue(stringValue("src/main/res/values/strings.xml", "speech_hunt_ready").contains("adult"))
+        assertTrue(stringValue("src/main/res/values-es/strings.xml", "speech_hunt_ready").contains("adulto"))
+    }
+
     @Test
     fun `hunt generation prompt renders with the variables the use case sends`() {
         val template = file("src/main/assets/prompts/hunt_generation_v2.txt").readText()

@@ -20,6 +20,7 @@ import mx.dev1.naturequest.data.image.ImageDownscaler
 import mx.dev1.naturequest.data.inference.EngineOptions
 import mx.dev1.naturequest.data.inference.LiteRtInferenceEngine
 import mx.dev1.naturequest.data.model.ModelStore
+import mx.dev1.naturequest.data.photos.MediaStoreGallerySaver
 import mx.dev1.naturequest.data.prompts.PromptRepository
 import mx.dev1.naturequest.domain.inference.InferenceRequest
 import mx.dev1.naturequest.domain.inference.InferenceStats
@@ -243,6 +244,16 @@ class SpikeRunner(
                 VerificationRun("synthetic.jpg", item, true, false, null, false, null, null, "", prepMs, null, e.message)
             }
         }
+    }
+
+    /** Saves one drawn image through the real gallery saver, to check MediaStore saving on a device. */
+    suspend fun galleryTest(): Int {
+        val file = File(context.cacheDir, "gallery-test.jpg")
+        file.writeBytes(ImageDownscaler.toJpeg(syntheticPhoto(), maxSidePx = 640))
+        val saved = MediaStoreGallerySaver(context).save(listOf(file.absolutePath))
+        file.delete()
+        say("GALLERY TEST saved=$saved")
+        return saved
     }
 
     private fun syntheticPhoto(): ByteArray {

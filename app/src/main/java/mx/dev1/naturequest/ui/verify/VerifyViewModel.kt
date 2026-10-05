@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import mx.dev1.naturequest.domain.hunt.HuntSession
 import mx.dev1.naturequest.domain.inference.ModelNotAvailableException
+import mx.dev1.naturequest.domain.speech.Speaker
 import mx.dev1.naturequest.domain.verification.PhotoPreprocessor
 import mx.dev1.naturequest.domain.verification.PhotoStore
 import mx.dev1.naturequest.domain.verification.PhotoVerification
@@ -40,6 +41,7 @@ class VerifyViewModel @AssistedInject constructor(
     private val preprocessor: PhotoPreprocessor,
     private val verifyPhoto: VerifyPhotoUseCase,
     private val photoStore: PhotoStore,
+    private val speaker: Speaker,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -55,6 +57,10 @@ class VerifyViewModel @AssistedInject constructor(
 
     private var job: Job? = null
 
+    init {
+        speaker.stop() // quiet while the camera is open
+    }
+
     /** Called with the raw camera shot. It is shrunk in memory, checked on the phone and never uploaded. */
     fun onPhotoCaptured(raw: ByteArray, rotationDegrees: Int) {
         job?.cancel()
@@ -67,6 +73,7 @@ class VerifyViewModel @AssistedInject constructor(
                 if (verification.outcome == VerificationOutcome.MATCH) {
                     session.markFound(itemId, photoStore.save(itemId, photo))
                 }
+                speaker.speak(listOfNotNull(verification.message, verification.hint).joinToString(" "))
                 VerifyUiState.Result(photo, verification)
             } catch (e: CancellationException) {
                 throw e
@@ -81,12 +88,18 @@ class VerifyViewModel @AssistedInject constructor(
     /** Stops checking and goes back to the camera. */
     fun cancel() {
         job?.cancel()
+        speaker.stop()
         _state.value = VerifyUiState.Capturing
     }
 
     /** Back to the camera for another try. */
     fun retake() {
         job?.cancel()
+        speaker.stop()
         _state.value = VerifyUiState.Capturing
+    }
+
+    override fun onCleared() {
+        speaker.stop()
     }
 }

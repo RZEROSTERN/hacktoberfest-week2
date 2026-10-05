@@ -15,3 +15,8 @@ val SurfaceLight = Color(0xFFFBFDF7)
 val OnSurfaceLight = Color(0xFF101510)
 val SurfaceDark = Color(0xFF101510)
 val OnSurfaceDark = Color(0xFFE1E3DC)
+
+// Medals: dark enough for a white star to stay visible in sunlight.
+val MedalGold = Color(0xFFB8860B)
+val MedalSilver = Color(0xFF6E7B85)
+val MedalBronze = Color(0xFF8C4A1F)

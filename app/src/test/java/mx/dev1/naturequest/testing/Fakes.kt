@@ -1,10 +1,17 @@
 package mx.dev1.naturequest.testing
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import mx.dev1.naturequest.domain.hunt.GallerySaver
+import mx.dev1.naturequest.domain.hunt.Medal
+import mx.dev1.naturequest.domain.hunt.TimeSource
 import mx.dev1.naturequest.domain.inference.InferenceEngine
 import mx.dev1.naturequest.domain.inference.InferenceRequest
 import mx.dev1.naturequest.domain.inference.InferenceResult
 import mx.dev1.naturequest.domain.inference.InferenceStats
 import mx.dev1.naturequest.domain.prompt.PromptSource
+import mx.dev1.naturequest.domain.speech.HuntTexts
+import mx.dev1.naturequest.domain.speech.Speaker
 import mx.dev1.naturequest.domain.verification.PhotoPreprocessor
 import mx.dev1.naturequest.domain.verification.PhotoStore
 import mx.dev1.naturequest.domain.verification.VerificationFallbacks
@@ -100,4 +107,57 @@ class FakeVerificationFallbacks : VerificationFallbacks {
     override fun genericMatch() = "GENERIC_MATCH"
 
     override fun genericMiss() = "GENERIC_MISS"
+}
+
+/** Records what would have been said aloud. */
+class FakeSpeaker : Speaker {
+    val spoken = mutableListOf<String>()
+    var stopCalls = 0
+        private set
+    var releaseCalls = 0
+        private set
+    private val _speaking = MutableStateFlow(false)
+    override val speaking: StateFlow<Boolean> = _speaking
+
+    override fun speak(text: String) {
+        spoken += text
+        _speaking.value = true
+    }
+
+    override fun stop() {
+        stopCalls++
+        _speaking.value = false
+    }
+
+    override fun release() {
+        releaseCalls++
+        _speaking.value = false
+    }
+}
+
+class FakeHuntTexts : HuntTexts {
+    override fun huntReadySpeech(items: List<String>) = "READY: " + items.joinToString("|")
+
+    override fun summarySpeech(found: Int, total: Int, minutesOutside: Int, medal: Medal) =
+        "SUMMARY $found/$total ${minutesOutside}min $medal"
+
+    override fun timeOutside(minutesOutside: Int) = "${minutesOutside} min outside"
+
+    override fun foundOf(found: Int, total: Int) = "found $found of $total"
+
+    override fun medalName(medal: Medal) = "medal ${medal.name.lowercase()}"
+}
+
+class FakeGallerySaver(private val result: (List<String>) -> Int = { it.size }) : GallerySaver {
+    val requests = mutableListOf<List<String>>()
+
+    override suspend fun save(photoPaths: List<String>): Int {
+        requests += photoPaths
+        return result(photoPaths)
+    }
+}
+
+/** A clock the test moves by hand. */
+class FakeTimeSource(var now: Long = 1_000_000L) : TimeSource {
+    override fun nowMillis() = now
 }

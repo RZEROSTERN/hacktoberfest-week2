@@ -52,6 +52,41 @@
     <string name="verify_fallback_match">¡Buen hallazgo!</string>
     <string name="verify_fallback_miss">Casi. ¡Prueben con otra foto!</string>
 
+    <string name="hunt_finish">Terminar búsqueda</string>
+    <string name="hunt_read_aloud">Leer la lista en voz alta</string>
+    <string name="hunt_stop_reading">Dejar de leer</string>
+    <string name="hunt_leave_title">¿Salir de la búsqueda?</string>
+    <string name="hunt_leave_body">Se borrarán su progreso y sus fotos.</string>
+    <string name="hunt_leave_confirm">Salir</string>
+    <string name="hunt_leave_stay">Seguir</string>
+
+    <string name="summary_title">¡Búsqueda completa!</string>
+    <string name="summary_empty">No hay ninguna búsqueda que mostrar.</string>
+    <string name="summary_done">Listo</string>
+    <string name="summary_not_found">No encontrado</string>
+    <string name="summary_save">Guardar fotos en la galería</string>
+    <string name="summary_save_failed">No se pudieron guardar las fotos.</string>
+    <plurals name="summary_saved">
+        <item quantity="one">Se guardó %d foto en su galería.</item>
+        <item quantity="many">Se guardaron %d fotos en su galería.</item>
+        <item quantity="other">Se guardaron %d fotos en su galería.</item>
+    </plurals>
+    <string name="summary_found">Encontraron %1$d de %2$d</string>
+    <string name="summary_time_under_a_minute">Menos de un minuto afuera</string>
+    <plurals name="summary_time_minutes">
+        <item quantity="one">%d minuto afuera</item>
+        <item quantity="many">%d minutos afuera</item>
+        <item quantity="other">%d minutos afuera</item>
+    </plurals>
+    <string name="summary_time_hours">%1$d h %2$d min afuera</string>
+    <string name="medal_gold">Medalla de oro</string>
+    <string name="medal_silver">Medalla de plata</string>
+    <string name="medal_bronze">Medalla de bronce</string>
+
+    <!-- Lo lee en voz alta el motor de voz del teléfono. -->
+    <string name="speech_hunt_ready">¡Su búsqueda está lista! Guarden el teléfono y vayan a buscar estas cosas, siempre con un adulto: %1$s ¡Diviértanse!</string>
+    <string name="speech_summary">¡Búsqueda completa! Encontraron %1$d de %2$d. %3$s. ¡Ganaron la %4$s!</string>
+
     <string name="action_back">Atrás</string>
     <string name="action_cancel">Cancelar</string>
 

@@ -8,17 +8,25 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import mx.dev1.naturequest.data.hunt.InMemoryHuntSession
+import mx.dev1.naturequest.data.hunt.SystemTimeSource
 import mx.dev1.naturequest.data.hunt.ResourceFallbackItems
 import mx.dev1.naturequest.data.image.DownscalingPhotoPreprocessor
 import mx.dev1.naturequest.data.inference.LiteRtInferenceEngine
 import mx.dev1.naturequest.data.model.ModelStore
 import mx.dev1.naturequest.data.photos.CachePhotoStore
+import mx.dev1.naturequest.data.photos.MediaStoreGallerySaver
 import mx.dev1.naturequest.data.prompts.PromptRepository
+import mx.dev1.naturequest.data.speech.AndroidSpeaker
+import mx.dev1.naturequest.data.speech.ResourceHuntTexts
 import mx.dev1.naturequest.data.verification.ResourceVerificationFallbacks
 import mx.dev1.naturequest.domain.hunt.FallbackItems
+import mx.dev1.naturequest.domain.hunt.GallerySaver
 import mx.dev1.naturequest.domain.hunt.HuntSession
+import mx.dev1.naturequest.domain.hunt.TimeSource
 import mx.dev1.naturequest.domain.inference.InferenceEngine
 import mx.dev1.naturequest.domain.prompt.PromptSource
+import mx.dev1.naturequest.domain.speech.HuntTexts
+import mx.dev1.naturequest.domain.speech.Speaker
 import mx.dev1.naturequest.domain.verification.PhotoPreprocessor
 import mx.dev1.naturequest.domain.verification.PhotoStore
 import mx.dev1.naturequest.domain.verification.VerificationFallbacks
@@ -35,6 +43,18 @@ abstract class InferenceModule {
 
     @Binds
     abstract fun bindHuntSession(impl: InMemoryHuntSession): HuntSession
+
+    @Binds
+    abstract fun bindTimeSource(impl: SystemTimeSource): TimeSource
+
+    @Binds
+    abstract fun bindSpeaker(impl: AndroidSpeaker): Speaker
+
+    @Binds
+    abstract fun bindHuntTexts(impl: ResourceHuntTexts): HuntTexts
+
+    @Binds
+    abstract fun bindGallerySaver(impl: MediaStoreGallerySaver): GallerySaver
 
     @Binds
     abstract fun bindPhotoPreprocessor(impl: DownscalingPhotoPreprocessor): PhotoPreprocessor

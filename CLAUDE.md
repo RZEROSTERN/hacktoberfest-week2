@@ -49,6 +49,8 @@ Needs JDK 17+ (see Gotchas).
 - LiteRT-LM `SamplerConfig.seed` defaults to 0, so sampling is deterministic: pass a random seed when variety matters (hunt generation does).
 - CameraX in-memory capture is JPEG and already carries EXIF orientation: rotate only when EXIF has none, or the photo ends up sideways.
 - Device UI tests: `adb shell pm grant mx.dev1.naturequest android.permission.CAMERA`; the debug `MainActivity` shows over the lock screen. Photos of the room can end up on screen, so check logs, not photos.
+- Speech uses the system `TextToSpeech`: it needs `<queries>` for `TTS_SERVICE` in the manifest, and is silent if the phone has no voice for its language.
+- A finished hunt belongs to the summary screen, which clears the session and photo cache; `HuntViewModel.onCleared` must only clear an unfinished hunt.
 - Android regex (ICU) throws on a bare `}` that the JVM accepts. Escape both braces; JVM unit tests will not catch it.
 - On the Pixel 10 the CPU backend beats GPU, decode is only ~7-23 tok/s, and the phone slows ~1.6x under sustained load. Keep model output short and benchmark in the slow state.
 - `.litertlm` files, keystores and `local.properties` are gitignored. Never commit them.
