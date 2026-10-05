@@ -2,15 +2,16 @@ package mx.dev1.naturequest.domain.inference
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import javax.inject.Inject
 
 /**
  * Parses the model's JSON output. Models sometimes wrap JSON in prose or code fences, so the first
  * balanced JSON object in the text is extracted before decoding. Anything that does not decode
  * into the expected shape is a failure; callers retry once and then use a safe fallback.
  */
-class ModelJsonParser(
-    private val json: Json = Json { ignoreUnknownKeys = true },
-) {
+class ModelJsonParser @Inject constructor() {
+    private val json = Json { ignoreUnknownKeys = true }
+
     fun parseHuntList(raw: String): Result<HuntListResponse> =
         parse(raw, HuntListResponse.serializer()).mapCatching {
             require(it.items.isNotEmpty() && it.items.none { item -> item.isBlank() }) {

@@ -22,12 +22,17 @@ interface InferenceEngine {
     suspend fun release()
 }
 
+/** The model file is not on the device (not pushed in development, not downloaded yet in release). */
+class ModelNotAvailableException(message: String) : Exception(message)
+
 class InferenceRequest(
     val prompt: String,
     /** Optional photo as JPEG bytes. Kept in memory only, never written to disk or uploaded. */
     val imageJpeg: ByteArray? = null,
     val temperature: Double = 0.7,
     val maxOutputTokens: Int = 512,
+    /** Sampling seed. The engine's default is fixed, so the same prompt always gives the same answer. */
+    val seed: Int = 0,
 )
 
 class InferenceResult(
