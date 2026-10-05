@@ -55,7 +55,9 @@ class SpikeActivity : ComponentActivity() {
         // Keep the screen on and visible while the benchmark runs: a locked phone throttles it.
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val initial = configFrom(intent)
-        if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_AUTO, false)) {
+        if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_GALLERY_TEST, false)) {
+            viewModel.galleryTest()
+        } else if (savedInstanceState == null && intent.getBooleanExtra(EXTRA_AUTO, false)) {
             viewModel.run(initial)
         }
         setContent {
@@ -84,6 +86,7 @@ class SpikeActivity : ComponentActivity() {
 
     private companion object {
         const val EXTRA_AUTO = "auto"
+        const val EXTRA_GALLERY_TEST = "galleryTest"
         const val EXTRA_BACKEND = "backend"
         const val EXTRA_VISION = "vision"
         const val EXTRA_MAX_SIDE = "maxSide"

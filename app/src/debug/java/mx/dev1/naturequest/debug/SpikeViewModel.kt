@@ -44,6 +44,18 @@ class SpikeViewModel(application: Application) : AndroidViewModel(application) {
         job?.cancel()
     }
 
+    /** Debug check of saving to the gallery with a drawn image (see SpikeRunner.galleryTest). */
+    fun galleryTest() {
+        viewModelScope.launch {
+            try {
+                SpikeRunner(getApplication(), ::append).galleryTest()
+            } catch (e: Throwable) {
+                append("GALLERY TEST FAILED: ${e::class.simpleName}: ${e.message}")
+            }
+            Log.i(SpikeRunner.TAG, "Done.")
+        }
+    }
+
     private fun append(line: String) = _log.update { (it + line).takeLast(MAX_LINES) }
 
     private companion object {
