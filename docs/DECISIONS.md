@@ -91,3 +91,25 @@ Update this file whenever a decision is made or changed (it feeds the write-up).
 ## D-019 Hunt settings travel in a type-safe route; ViewModel built with assisted injection (2026-10-05)
 - **Decision:** `Hunt(place, length, ageRange)` is a `@Serializable` navigation route and `HuntViewModel` receives `HuntSettings` through Hilt assisted injection, not a `SavedStateHandle`.
 - **Why:** the ViewModel stays a plain constructor in unit tests (no Android `Bundle`), and the route arguments survive process death, so the hunt is simply generated again. The route enums carry `@Keep` so their serializers survive minified builds (lint requires it).
+
+## D-020 Verification: the player picks the item, then takes the photo (2026-10-05)
+- **Decision:** tapping an item on the list opens the camera for that item, and the model answers one focused question ("does this photo show X?"). The model is not asked to work out which of up to 12 items a photo matches.
+- **Why:** it is the question the spike benchmarked (about 5 s), the prompt stays short, and the answer is more reliable than picking from a list. It also costs the player only one extra tap.
+- **Rejected:** "just take a photo and the AI finds the matching item" (longer prompt, slower, easier to get wrong). It can be added later behind the same use case.
+
+## D-021 Photo pipeline and privacy (2026-10-05)
+- **Decision:** CameraX captures in memory, `ImageDownscaler` shrinks the photo to 640 px (JPEG, EXIF-aware), and only that small JPEG goes to the model. On a match the small JPEG, never the original, is saved to app-private cache for the summary screen. The cache is deleted when the player leaves the hunt, and when the app starts (a hunt only lives in memory, so leftovers belong to a hunt that no longer exists). The only permission added is `CAMERA`; there is still no `INTERNET` permission.
+- **Verified on the Pixel 10:** CameraX's in-memory capture is JPEG (not YUV as a docs summary claimed), 4000x3000 with `rotationDegrees=90`, **and the JPEG already carries EXIF orientation**, so rotating it again would turn it sideways. The preprocessor therefore rotates only when EXIF has no orientation, and the logs confirmed a correct 480x640 portrait result.
+- **Not done:** the app does not save photos to the gallery yet (the summary step adds "Save to gallery").
+
+## D-022 The model's feedback is untrusted text (2026-10-05)
+- **Decision:** the message and hint the model writes are checked by `SafetyValidator.containsUnsafeInstruction` (a looser sentence-level list: pick, touch, climb, eat, water, roads, berries and mushrooms, in English and Spanish; it still allows "I see a bee" and "take another photo"). An unsafe message is replaced by a generic localized line and the hint is dropped. Invalid JSON gets one retry with a different seed (same seed would repeat the same answer), then "I'm not sure, try another photo". A hint is only kept when the photo did not match.
+- **Why:** this text is shown and later read aloud to children, and a model (or text visible in a photo) could make it say something harmful. The built-in fallback texts are covered by a guard test.
+
+## D-023 Portrait only (2026-10-05)
+- **Decision:** `MainActivity` is locked to portrait, and the matching lint checks are suppressed in the manifest.
+- **Why:** one-handed outdoor use, and it keeps camera rotation simple. Android 16 ignores the lock only on large screens, which are not the target.
+
+## D-024 The hunt in progress is an in-memory singleton (2026-10-05)
+- **Decision:** `HuntSession` holds the items and found flags in memory, shared by the hunt, camera and (later) summary screens. Leaving the hunt screen ends it and deletes the photos. If Android kills the process, the hunt is lost.
+- **Why:** a hunt is a short outing; persisting it would add a database for little gain. History (step 8) is a separate, optional feature.

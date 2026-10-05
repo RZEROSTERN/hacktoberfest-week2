@@ -63,6 +63,13 @@ Output length (62-147 tokens) dominates the time, because decoding is slow on th
 - The first prompt version made the model wrap its JSON in a markdown code fence. The tightened prompt
   (`verification_v1.txt`) returns one raw JSON line. The parser also tolerates fences.
 
+## In the real app (photo verification, end to end)
+
+On the Pixel 10, tapping the shutter to seeing the result took roughly **7-10 s**: capture, shrinking the
+4000x3000 JPEG to 480x640 (about 30 ms), loading the model (about 0.5 s warm), and the model's answer
+(CPU, 140 visual tokens). That was measured by polling the screen every 1-2 s, so treat it as approximate.
+It is consistent with the 4.5-6.5 s spike numbers plus capture and load. Photo accuracy is still not measured.
+
 ## Memory (peak RSS, from `/proc/self/status`)
 
 | Backend | Peak RSS | After releasing the engine |

@@ -11,3 +11,4 @@ paths:
 - No strings outside resources: use `stringResource(R.string.…)`. Every new string goes in both `values/strings.xml` (English) and `values-es/strings.xml` (Spanish).
 - Every long operation (model load, generation, verification, download) shows progress and can be cancelled.
 - ViewModels expose a single `UiState` through `StateFlow`; screens collect it with `collectAsStateWithLifecycle()`.
+- In `DisposableEffect`, copy state into a local inside the effect before `onDispose`; reading the state there sees the new value and cleans up the wrong thing (it unbound a freshly bound camera).

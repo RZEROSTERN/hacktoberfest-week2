@@ -47,6 +47,8 @@ Needs JDK 17+ (see Gotchas).
 - Dev model location is app-private `files/`, the same place the release download goes. `run-as` only works on debug builds.
 - LiteRT-LM: its `main` branch is ahead of the pinned 0.17.1 AAR, so check APIs with `javap` on the AAR. `Message` has no `.text`, use `toString()`. Cancelling the `sendMessageAsync` Flow does not stop native inference: call `conversation.cancelProcess()`.
 - LiteRT-LM `SamplerConfig.seed` defaults to 0, so sampling is deterministic: pass a random seed when variety matters (hunt generation does).
+- CameraX in-memory capture is JPEG and already carries EXIF orientation: rotate only when EXIF has none, or the photo ends up sideways.
+- Device UI tests: `adb shell pm grant mx.dev1.naturequest android.permission.CAMERA`; the debug `MainActivity` shows over the lock screen. Photos of the room can end up on screen, so check logs, not photos.
 - Android regex (ICU) throws on a bare `}` that the JVM accepts. Escape both braces; JVM unit tests will not catch it.
 - On the Pixel 10 the CPU backend beats GPU, decode is only ~7-23 tok/s, and the phone slows ~1.6x under sustained load. Keep model output short and benchmark in the slow state.
 - `.litertlm` files, keystores and `local.properties` are gitignored. Never commit them.
