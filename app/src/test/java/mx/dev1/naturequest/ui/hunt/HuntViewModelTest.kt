@@ -19,8 +19,11 @@ import mx.dev1.naturequest.domain.hunt.SafetyValidator
 import mx.dev1.naturequest.domain.inference.ModelJsonParser
 import mx.dev1.naturequest.domain.inference.ModelNotAvailableException
 import mx.dev1.naturequest.testing.FakeInferenceEngine
+import mx.dev1.naturequest.testing.FakeHuntTexts
 import mx.dev1.naturequest.testing.FakePhotoStore
 import mx.dev1.naturequest.testing.FakePromptSource
+import mx.dev1.naturequest.testing.FakeSpeaker
+import mx.dev1.naturequest.testing.FakeTimeSource
 import mx.dev1.naturequest.testing.MainDispatcherRule
 import mx.dev1.naturequest.testing.huntJson
 import org.junit.Assert.assertEquals
@@ -35,7 +38,8 @@ class HuntViewModelTest {
 
     private val settings = HuntSettings(PlaceType.FOREST, HuntLength.SHORT, AgeRange.AGES_4_TO_6)
     private val fallback = FallbackItems { listOf("Something round", "Something blue", "A tall tree") }
-    private val session = InMemoryHuntSession()
+    private val session = InMemoryHuntSession(FakeTimeSource())
+    private val speaker = FakeSpeaker()
     private val photoStore = FakePhotoStore()
     private val goodAnswer =
         huntJson("a red leaf", "a feather", "bark with moss", "something round", "a smooth stone", "a tall tree", "x")
@@ -45,6 +49,8 @@ class HuntViewModelTest {
         GenerateHuntUseCase(engine, FakePromptSource(), fallback, ModelJsonParser(), SafetyValidator()),
         session,
         photoStore,
+        speaker,
+        FakeHuntTexts(),
     )
 
     @Test
@@ -118,13 +124,7 @@ class HuntViewModelTest {
         assertTrue(vm.state.value is HuntUiState.Generating) // no result, no error
     }
 
-    @Test
-    fun `leaving the hunt ends the session and deletes the photos`() = runTest {
-        val vm = viewModel(FakeInferenceEngine.scripted(goodAnswer))
-        advanceUntilIdle()
-        photoStore.saved[0] = byteArrayOf(1)
-        assertTrue(session.state.value != null)
-
+    private fun clearViewModel(vm: HuntViewModel) {
         // Clearing the ViewModelStore is what the navigation back stack does when the screen is left.
         val store = ViewModelStore()
         ViewModelProvider.create(store, object : ViewModelProvider.Factory {
@@ -133,9 +133,73 @@ class HuntViewModelTest {
                 vm as T
         })[HuntViewModel::class]
         store.clear()
+    }
+
+    @Test
+    fun `reads the list aloud as soon as it is ready`() = runTest {
+        viewModel(FakeInferenceEngine.scripted(goodAnswer))
+        advanceUntilIdle()
+
+        assertEquals(
+            listOf("READY: A red leaf|A feather|Bark with moss|Something round|A smooth stone"),
+            speaker.spoken,
+        )
+    }
+
+    @Test
+    fun `can read the list again and stop reading`() = runTest {
+        val vm = viewModel(FakeInferenceEngine.scripted(goodAnswer))
+        advanceUntilIdle()
+
+        vm.readAloud()
+        assertEquals(2, speaker.spoken.size)
+        assertTrue(vm.speaking.value)
+
+        vm.stopReading()
+        assertTrue(!vm.speaking.value)
+    }
+
+    @Test
+    fun `finishing stops the voice and the clock but keeps the hunt for the summary`() = runTest {
+        val vm = viewModel(FakeInferenceEngine.scripted(goodAnswer))
+        advanceUntilIdle()
+        session.markFound(0, "/cache/item-0.jpg")
+
+        vm.finish()
+
+        assertTrue(session.state.value!!.finished)
+        assertEquals(1, session.state.value!!.foundCount)
+        assertEquals(1, speaker.stopCalls)
+    }
+
+    @Test
+    fun `leaving a finished hunt keeps it for the summary and does not cut the summary speech`() = runTest {
+        val vm = viewModel(FakeInferenceEngine.scripted(goodAnswer))
+        advanceUntilIdle()
+        photoStore.saved[0] = byteArrayOf(1)
+        vm.finish()
+        val stopsBefore = speaker.stopCalls
+
+        clearViewModel(vm)
+
+        assertTrue(session.state.value != null)
+        assertEquals(1, photoStore.saved.size)
+        assertEquals(stopsBefore, speaker.stopCalls)
+        assertEquals(0, speaker.releaseCalls)
+    }
+
+    @Test
+    fun `leaving an unfinished hunt forgets it, deletes the photos and silences the voice`() = runTest {
+        val vm = viewModel(FakeInferenceEngine.scripted(goodAnswer))
+        advanceUntilIdle()
+        photoStore.saved[0] = byteArrayOf(1)
+        assertTrue(session.state.value != null)
+
+        clearViewModel(vm)
 
         assertNull(session.state.value)
         assertTrue(photoStore.saved.isEmpty())
         assertEquals(1, photoStore.clearCalls)
+        assertEquals(1, speaker.releaseCalls)
     }
 }

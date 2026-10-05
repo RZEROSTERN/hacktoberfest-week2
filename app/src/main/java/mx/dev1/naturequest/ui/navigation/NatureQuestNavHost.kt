@@ -14,6 +14,8 @@ import mx.dev1.naturequest.domain.hunt.PlaceType
 import mx.dev1.naturequest.ui.hunt.HuntScreen
 import mx.dev1.naturequest.ui.hunt.HuntViewModel
 import mx.dev1.naturequest.ui.setup.SetupScreen
+import mx.dev1.naturequest.ui.summary.SummaryScreen
+import mx.dev1.naturequest.ui.summary.SummaryViewModel
 import mx.dev1.naturequest.ui.verify.VerifyScreen
 import mx.dev1.naturequest.ui.verify.VerifyViewModel
 
@@ -26,6 +28,10 @@ data class Hunt(
     val length: HuntLength,
     val ageRange: AgeRange,
 )
+
+/** How the hunt went: medal, time outside and the photos of the finds. */
+@Serializable
+data object Summary
 
 /** Take and check a photo for one hunt item (its id in the current hunt). */
 @Serializable
@@ -52,6 +58,9 @@ fun NatureQuestNavHost() {
                 viewModel = viewModel,
                 onBack = { navController.popBackStack() },
                 onFoundSomething = { itemId -> navController.navigate(Verify(itemId)) },
+                onFinished = {
+                    navController.navigate(Summary) { popUpTo<Hunt> { inclusive = true } }
+                },
             )
         }
         composable<Verify> { entry ->
@@ -60,6 +69,12 @@ fun NatureQuestNavHost() {
                 creationCallback = { factory -> factory.create(route.itemId) },
             )
             VerifyScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
+        }
+        composable<Summary> {
+            SummaryScreen(
+                viewModel = hiltViewModel<SummaryViewModel>(),
+                onDone = { navController.popBackStack() },
+            )
         }
     }
 }

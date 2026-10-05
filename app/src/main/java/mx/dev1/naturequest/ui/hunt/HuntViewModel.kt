@@ -19,6 +19,8 @@ import mx.dev1.naturequest.domain.hunt.HuntItem
 import mx.dev1.naturequest.domain.hunt.HuntSession
 import mx.dev1.naturequest.domain.hunt.HuntSettings
 import mx.dev1.naturequest.domain.inference.ModelNotAvailableException
+import mx.dev1.naturequest.domain.speech.HuntTexts
+import mx.dev1.naturequest.domain.speech.Speaker
 import mx.dev1.naturequest.domain.verification.PhotoStore
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -36,6 +38,8 @@ class HuntViewModel @AssistedInject constructor(
     private val generateHunt: GenerateHuntUseCase,
     private val session: HuntSession,
     private val photoStore: PhotoStore,
+    private val speaker: Speaker,
+    private val texts: HuntTexts,
 ) : ViewModel() {
 
     @AssistedFactory
@@ -61,6 +65,9 @@ class HuntViewModel @AssistedInject constructor(
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, HuntUiState.Generating(HuntGenerationProgress.LOADING_MODEL))
 
+    /** True while the list is being read aloud (the button then offers to stop). */
+    val speaking: StateFlow<Boolean> = speaker.speaking
+
     private var job: Job? = null
 
     init {
@@ -75,6 +82,7 @@ class HuntViewModel @AssistedInject constructor(
             generation.value = try {
                 val result = generateHunt(settings, onProgress = { generation.value = Generation.Running(it) })
                 session.start(settings, result.items)
+                speaker.speak(texts.huntReadySpeech(result.items))
                 Generation.Done
             } catch (e: CancellationException) {
                 throw e
@@ -91,9 +99,28 @@ class HuntViewModel @AssistedInject constructor(
         job?.cancel()
     }
 
+    /** Reads the whole list aloud again. */
+    fun readAloud() {
+        val items = session.state.value?.items?.map { it.text } ?: return
+        speaker.speak(texts.huntReadySpeech(items))
+    }
+
+    fun stopReading() = speaker.stop()
+
+    /** Ends the hunt for the summary: stops the clock and the voice; the hunt stays until the summary closes. */
+    fun finish() {
+        speaker.stop()
+        session.finish()
+    }
+
     override fun onCleared() {
-        // Leaving the hunt ends it: forget the list and delete the photos of the finds.
-        session.end()
-        photoStore.clear()
+        // A finished hunt now belongs to the summary screen, which cleans up when it closes (and
+        // keeps speaking). Leaving an unfinished hunt forgets it and deletes the photos of the finds.
+        if (session.state.value?.finished != true) {
+            speaker.stop()
+            speaker.release()
+            session.clear()
+            photoStore.clear()
+        }
     }
 }

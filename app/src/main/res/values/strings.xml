@@ -55,6 +55,39 @@
     <string name="verify_fallback_match">Great find!</string>
     <string name="verify_fallback_miss">Not quite. Try another photo!</string>
 
+    <string name="hunt_finish">Finish hunt</string>
+    <string name="hunt_read_aloud">Read the list aloud</string>
+    <string name="hunt_stop_reading">Stop reading</string>
+    <string name="hunt_leave_title">Leave the hunt?</string>
+    <string name="hunt_leave_body">Your progress and photos will be deleted.</string>
+    <string name="hunt_leave_confirm">Leave</string>
+    <string name="hunt_leave_stay">Stay</string>
+
+    <string name="summary_title">Hunt complete!</string>
+    <string name="summary_empty">There is no hunt to show.</string>
+    <string name="summary_done">Done</string>
+    <string name="summary_not_found">Not found</string>
+    <string name="summary_save">Save photos to gallery</string>
+    <string name="summary_save_failed">Could not save the photos.</string>
+    <plurals name="summary_saved">
+        <item quantity="one">Saved %d photo to your gallery.</item>
+        <item quantity="other">Saved %d photos to your gallery.</item>
+    </plurals>
+    <string name="summary_found">You found %1$d of %2$d</string>
+    <string name="summary_time_under_a_minute">Less than a minute outside</string>
+    <plurals name="summary_time_minutes">
+        <item quantity="one">%d minute outside</item>
+        <item quantity="other">%d minutes outside</item>
+    </plurals>
+    <string name="summary_time_hours">%1$d h %2$d min outside</string>
+    <string name="medal_gold">Gold medal</string>
+    <string name="medal_silver">Silver medal</string>
+    <string name="medal_bronze">Bronze medal</string>
+
+    <!-- Read aloud by the phone\'s speech engine. -->
+    <string name="speech_hunt_ready">Your hunt is ready! Put the phone away and go look for these things, always with an adult: %1$s Have fun!</string>
+    <string name="speech_summary">Hunt complete! You found %1$d of %2$d. %3$s. You earned a %4$s!</string>
+
     <string name="action_back">Back</string>
     <string name="action_cancel">Cancel</string>
 

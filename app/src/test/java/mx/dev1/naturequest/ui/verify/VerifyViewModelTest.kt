@@ -15,6 +15,8 @@ import mx.dev1.naturequest.domain.verification.VerificationOutcome
 import mx.dev1.naturequest.domain.verification.VerifyPhotoUseCase
 import mx.dev1.naturequest.testing.FakeInferenceEngine
 import mx.dev1.naturequest.testing.FakePhotoPreprocessor
+import mx.dev1.naturequest.testing.FakeSpeaker
+import mx.dev1.naturequest.testing.FakeTimeSource
 import mx.dev1.naturequest.testing.FakePhotoStore
 import mx.dev1.naturequest.testing.FakePromptSource
 import mx.dev1.naturequest.testing.FakeVerificationFallbacks
@@ -32,7 +34,8 @@ class VerifyViewModelTest {
     @get:Rule
     val mainDispatcher = MainDispatcherRule()
 
-    private val session = InMemoryHuntSession().apply {
+    private val speaker = FakeSpeaker()
+    private val session = InMemoryHuntSession(FakeTimeSource()).apply {
         start(HuntSettings(PlaceType.PARK, HuntLength.SHORT, AgeRange.AGES_7_TO_9), listOf("A red leaf", "A feather"))
     }
     private val preprocessor = FakePhotoPreprocessor()
@@ -44,6 +47,7 @@ class VerifyViewModelTest {
         preprocessor,
         VerifyPhotoUseCase(engine, FakePromptSource(), ModelJsonParser(), SafetyValidator(), FakeVerificationFallbacks()),
         photoStore,
+        speaker,
     )
 
     @Test
@@ -120,6 +124,40 @@ class VerifyViewModelTest {
         assertEquals(VerifyUiState.Capturing, vm.state.value)
         assertEquals(1, engine.releaseCalls)
         assertTrue(session.state.value!!.items.none { it.found })
+    }
+
+    @Test
+    fun `keeps quiet while the camera is open and reads the feedback aloud`() = runTest {
+        val vm = viewModel(FakeInferenceEngine.scripted(verificationJson(false, "That is a stone.", "Look up!")))
+        assertEquals(1, speaker.stopCalls) // silence on entering the camera
+
+        vm.onPhotoCaptured(byteArrayOf(1), 0)
+        advanceUntilIdle()
+
+        assertEquals(listOf("That is a stone. Look up!"), speaker.spoken)
+    }
+
+    @Test
+    fun `a match is read aloud without a hint`() = runTest {
+        val vm = viewModel(FakeInferenceEngine.scripted(verificationJson(true, "Great red leaf!", "ignored")))
+
+        vm.onPhotoCaptured(byteArrayOf(1), 0)
+        advanceUntilIdle()
+
+        assertEquals(listOf("Great red leaf!"), speaker.spoken)
+    }
+
+    @Test
+    fun `cancel and retake silence the voice`() = runTest {
+        val vm = viewModel(FakeInferenceEngine.scripted(verificationJson(false, "Not a leaf.")))
+        vm.onPhotoCaptured(byteArrayOf(1), 0)
+        advanceUntilIdle()
+        val before = speaker.stopCalls
+
+        vm.retake()
+        vm.cancel()
+
+        assertEquals(before + 2, speaker.stopCalls)
     }
 
     @Test
