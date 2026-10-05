@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Used only to check the player's photos on the phone. Photos are never uploaded. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:name=".NatureQuestApp"
@@ -16,9 +23,13 @@
         <uses-native-library
             android:name="libOpenCL.so"
             android:required="false" />
+        <!-- Portrait only: one hand, outdoors. It also keeps camera photo rotation simple. Android 16 ignores
+             this lock only on large screens (tablets, foldables unfolded), which are not the target. -->
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity,DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -140,4 +140,23 @@ class SafetyValidatorTest {
         val verdict = validator.validate("A coiled snake") as Verdict.Rejected
         assertEquals("snake", verdict.detail)
     }
+
+    @Test
+    fun `sentences may describe animals and say to take another photo`() {
+        assertEquals(false, validator.containsUnsafeInstruction("I see a cute bee, not a leaf!"))
+        assertEquals(false, validator.containsUnsafeInstruction("Take another photo of a red leaf."))
+        assertEquals(false, validator.containsUnsafeInstruction("Prueba con otra foto de una hoja roja."))
+        assertEquals(false, validator.containsUnsafeInstruction("Look up at the trees, you will feel proud!"))
+        assertEquals(false, validator.containsUnsafeInstruction("¡Qué buen hallazgo!"))
+    }
+
+    @Test
+    fun `sentences that tell a child to pick, touch, climb, eat or go near water or roads are unsafe`() {
+        listOf(
+            "Pick it up and take it home.", "Touch the bark gently.", "Climb the tree to see more.",
+            "You can eat that berry.", "Walk to the river and look.", "Cross the street to find one.",
+            "Grab a leaf from the branch.", "Smell the flower.", "Recoge una hoja.", "Toca la corteza.",
+            "Trepa al árbol.", "Ve al lago.", "Come una baya.",
+        ).forEach { assertTrue("\"$it\" should be unsafe", validator.containsUnsafeInstruction(it)) }
+    }
 }

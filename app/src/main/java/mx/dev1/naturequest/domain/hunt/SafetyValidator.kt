@@ -40,6 +40,14 @@ class SafetyValidator @Inject constructor() {
 
     fun isSafe(raw: String): Boolean = validate(raw) is Verdict.Valid
 
+    /**
+     * True if a sentence the model wrote (feedback or a hint) could tell a child to pick, touch,
+     * approach, eat or climb something, or to go near water or roads. Looser than [validate]:
+     * sentences may describe the photo ("I see a bee"), and may say "take another photo".
+     */
+    fun containsUnsafeInstruction(text: String): Boolean =
+        tokens(text).any { it in SENTENCE_BLOCKED_WORDS }
+
     private fun clean(raw: String): String =
         raw.trim()
             .trim('"', '\'', '`', '“', '”', '‘', '’', '.', '!', ';', ':', ' ')
@@ -78,6 +86,24 @@ class SafetyValidator @Inject constructor() {
             "near water", "near the water", "in the water", "by the water", "next to water", "next to the water",
             "off the path", "leave the path", "off the trail", "turn over", "cerca del agua", "en el agua",
             "junto al agua", "fuera del camino", "dar la vuelta", "dale la vuelta",
+        )
+
+        /** For model-written sentences: harmful instructions and dangerous places only. */
+        val SENTENCE_BLOCKED_WORDS: Set<String> = words(
+            "pick picks picked picking pluck plucks plucked plucking collect collects collected collecting",
+            "gather gathers gathered gathering touch touches touched touching grab grabs grabbed grabbing",
+            "squeeze squeezes pet pets petting hug hugs kiss kisses lick licks smell smells smelling sniff",
+            "catch catches caught catching chase chases chasing feed feeds feeding approach approaches",
+            "approaching climb climbs climbed climbing swim swims swimming dig digs digging eat eats ate",
+            "eaten eating taste tastes tasted tasting drink drinks bite chew",
+            "lake lakes river rivers pond ponds stream streams creek creeks canal waterfall sea ocean cliff",
+            "cliffs road roads street streets traffic highway berry berries mushroom mushrooms fungus fungi",
+            "toadstool sharp glass needle syringe",
+            "recoge recoger recogiendo arranca arrancar toca tocar tocando agarra agarrar acaricia acariciar",
+            "abraza abrazar besa huele oler lame atrapa atrapar persigue perseguir alimenta alimentar acercate",
+            "acercar trepa trepar escala escalar nadar cava cavar come comer comiendo",
+            "lago lagos rio rios estanque arroyo cascada mar acantilado barranco calle calles carretera",
+            "avenida trafico autopista baya bayas hongo hongos seta setas filoso vidrio aguja jeringa",
         )
 
         /** All entries lowercase without accents; matched against whole words only. */
