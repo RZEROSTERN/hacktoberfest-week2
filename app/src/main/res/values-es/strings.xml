@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_title">¿Listos para una búsqueda en la naturaleza?</string>
+    <string name="setup_subtitle">Encuentren cosas al aire libre, juntos. Guarden el teléfono en el bolsillo.</string>
+    <string name="setup_start">Empezar búsqueda</string>
+
+    <string name="hunt_placeholder_title">Búsqueda en curso</string>
+    <string name="hunt_placeholder_body">Aquí aparecerá la lista de la búsqueda.</string>
+
+    <string name="action_back">Atrás</string>
+</resources>
