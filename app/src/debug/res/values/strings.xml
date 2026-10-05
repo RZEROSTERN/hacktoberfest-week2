@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="spike_label" translatable="false">NQ Spike</string>
+    <string name="spike_title" translatable="false">Model spike (debug only)</string>
+    <string name="spike_backend" translatable="false">Backend</string>
+    <string name="spike_image_side" translatable="false">Max image side (px)</string>
+    <string name="spike_visual_tokens" translatable="false">Visual tokens per image</string>
+    <string name="spike_run" translatable="false">Run spike</string>
+    <string name="spike_cancel" translatable="false">Cancel</string>
+</resources>
