@@ -35,3 +35,12 @@ Update this file whenever a decision is made or changed (it feeds the write-up).
 ## D-007 Release build is not minified (2026-10-05)
 - **Decision:** `isMinifyEnabled = false` for now.
 - **Why:** LiteRT-LM uses JNI and reflection; shrinking risks runtime crashes that would cost time we do not have. Revisit only if APK size becomes a problem.
+
+## D-008 Dev and release share one model location: app-private `files/` (2026-10-05)
+- **Decision:** the app looks for the `.litertlm` model in its own `files/` directory. In development it gets there with `adb push` to `/data/local/tmp/`, then `adb shell run-as … cp` into `files/` (debug builds only). The release download writes to the same directory.
+- **Why:** verified on the target phone. `run-as` could not read `/sdcard/Android/data/<pkg>/files/` after an `adb push` there (permission denied), so that route was rejected. Using one location means the dev path exercises the same code as the release path, and the model never sits in shared storage.
+- **Cost:** the model is briefly on disk twice during the push (once in `/data/local/tmp`, once in `files/`).
+
+## D-009 Claude Code project memory layout (2026-10-05)
+- **Decision:** a short `CLAUDE.md` (project, commands, GitFlow, non-negotiables, gotchas), two path-scoped rules (`.claude/rules/inference.md` for `data/`, `domain/` and prompts; `.claude/rules/ui.md` for `ui/` and `strings.xml`), and a gitignored `CLAUDE.local.md` for machine-specific details (device, JDK path, model path).
+- **Why:** the official docs say instructions get followed more reliably when they are short and specific, and that anything relevant to only part of the codebase belongs in `paths:`-scoped rules, which load only when Claude touches matching files. Path scoping uses the `paths` frontmatter key (a YAML list of globs), the only field Claude Code reads from a rule.
