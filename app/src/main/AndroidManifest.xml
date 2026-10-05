@@ -8,6 +8,13 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <!-- Android 11+: lets the app find the phone's speech engine to read hunts and feedback aloud. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".NatureQuestApp"
         android:allowBackup="false"
