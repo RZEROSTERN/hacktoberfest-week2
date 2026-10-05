@@ -14,6 +14,7 @@ paths:
 - Model loading and inference always run off the main thread (inject the dispatcher so tests can replace it). Engine initialization is blocking.
 - Cancelling a coroutine must also stop native inference: call `conversation.cancelProcess()` (the Flow does not).
 - Decode is slow on the target phone (about 7-23 tok/s), so keep each prompt's answer short and cap `maxOutputTokens`. Defaults: CPU backend, 140 visual tokens, photos downscaled to 640 px. Numbers are in `docs/BENCHMARKS.md`.
+- Load the engine per use and release it right after (warm reload is 0.4-0.8 s; loaded it holds 2+ GB). Pass a random `seed` when variety matters: the engine default is deterministic.
 - Release the engine when it is not needed (hunt over, app backgrounded, ViewModel cleared). It holds gigabytes of memory.
 - Photos are handled in memory and are never uploaded. This layer makes no network calls except the model download.
 - Check the official LiteRT-LM docs before using its API. Do not guess.
