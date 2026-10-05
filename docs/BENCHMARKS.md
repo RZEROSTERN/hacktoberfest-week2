@@ -70,6 +70,13 @@ On the Pixel 10, tapping the shutter to seeing the result took roughly **7-10 s*
 (CPU, 140 visual tokens). That was measured by polling the screen every 1-2 s, so treat it as approximate.
 It is consistent with the 4.5-6.5 s spike numbers plus capture and load. Photo accuracy is still not measured.
 
+## Model download (first launch)
+
+Measured on the Pixel 10 over unmetered Wi-Fi, downloading the 2.59 GB model from Hugging Face's CDN:
+about **20 MB/s**, so roughly **2 minutes**; the SHA-256 check of the finished file takes about **5 s**;
+an interrupted download (app killed at 17%) resumed from the partial file and verified correctly.
+Your connection will differ.
+
 ## Memory (peak RSS, from `/proc/self/status`)
 
 | Backend | Peak RSS | After releasing the engine |
