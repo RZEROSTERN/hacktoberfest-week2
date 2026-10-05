@@ -24,10 +24,33 @@
     <string name="hunt_writing_list">Escribiendo su lista…</string>
     <string name="hunt_wait_hint">Todo pasa en este teléfono, sin internet. Tarda unos segundos.</string>
     <string name="hunt_ready_title">Su búsqueda</string>
-    <string name="hunt_ready_hint">¡Guarden el teléfono y vayan a encontrar estas cosas!</string>
+    <string name="hunt_tap_hint">¿Encontraron algo? Tóquenlo en la lista y tomen una foto.</string>
+    <string name="hunt_item_found">Encontrado</string>
     <string name="hunt_error_model_missing">El modelo de IA todavía no está en este teléfono.</string>
     <string name="hunt_error_generic">Algo salió mal al preparar la búsqueda.</string>
     <string name="hunt_retry">Intentar de nuevo</string>
+
+    <string name="verify_looking_for">Buscando: %1$s</string>
+    <string name="verify_take_photo">Tomar foto</string>
+    <string name="verify_permission_title">Acceso a la cámara</string>
+    <string name="verify_permission_body">Nature Quest usa la cámara solo para revisar sus fotos. Nunca salen de este teléfono.</string>
+    <string name="verify_permission_allow">Permitir cámara</string>
+    <string name="verify_permission_settings">Abrir ajustes</string>
+    <string name="verify_camera_error">No se pudo iniciar la cámara.</string>
+    <string name="verify_checking">Revisando su foto…</string>
+    <string name="verify_checking_hint">Pasa en este teléfono, sin internet. Tarda unos segundos.</string>
+    <string name="verify_result_match">¡Lo encontraron!</string>
+    <string name="verify_result_no_match">Esta vez no</string>
+    <string name="verify_result_not_sure">Mmm…</string>
+    <string name="verify_hint">Pista: %1$s</string>
+    <string name="verify_try_again">Intentar de nuevo</string>
+    <string name="verify_back_to_list">Volver a la lista</string>
+    <string name="verify_photo_description">La foto que tomaron</string>
+    <string name="verify_error_generic">Algo salió mal al revisar su foto.</string>
+    <!-- Se usa en lugar de las palabras de la IA cuando no da una respuesta útil o dice algo inseguro. -->
+    <string name="verify_fallback_not_sure">No estoy seguro de esa. ¡Prueben con otra foto!</string>
+    <string name="verify_fallback_match">¡Buen hallazgo!</string>
+    <string name="verify_fallback_miss">Casi. ¡Prueben con otra foto!</string>
 
     <string name="action_back">Atrás</string>
     <string name="action_cancel">Cancelar</string>

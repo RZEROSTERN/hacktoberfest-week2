@@ -26,11 +26,34 @@
     <string name="hunt_writing_list">Writing your hunt list…</string>
     <string name="hunt_wait_hint">It all happens on this phone, with no internet. It takes a few seconds.</string>
     <string name="hunt_ready_title">Your hunt</string>
-    <string name="hunt_ready_hint">Put the phone away and go find these things!</string>
+    <string name="hunt_tap_hint">Found something? Tap it on the list and take a photo.</string>
+    <string name="hunt_item_found">Found</string>
     <string name="hunt_error_model_missing">The AI model is not on this phone yet.</string>
     <string name="hunt_error_generic">Something went wrong while making your hunt.</string>
     <string name="hunt_retry">Try again</string>
     <string name="hunt_item_numbered" translatable="false">%1$d. %2$s</string>
+
+    <string name="verify_looking_for">Looking for: %1$s</string>
+    <string name="verify_take_photo">Take photo</string>
+    <string name="verify_permission_title">Camera access</string>
+    <string name="verify_permission_body">Nature Quest uses the camera only to check your photos. They never leave this phone.</string>
+    <string name="verify_permission_allow">Allow camera</string>
+    <string name="verify_permission_settings">Open settings</string>
+    <string name="verify_camera_error">The camera could not start.</string>
+    <string name="verify_checking">Checking your photo…</string>
+    <string name="verify_checking_hint">It happens on this phone, with no internet. It takes a few seconds.</string>
+    <string name="verify_result_match">You found it!</string>
+    <string name="verify_result_no_match">Not this time</string>
+    <string name="verify_result_not_sure">Hmm…</string>
+    <string name="verify_hint">Tip: %1$s</string>
+    <string name="verify_try_again">Try again</string>
+    <string name="verify_back_to_list">Back to the list</string>
+    <string name="verify_photo_description">The photo you took</string>
+    <string name="verify_error_generic">Something went wrong while checking your photo.</string>
+    <!-- Used instead of the AI's own words when it gives no usable answer or says something unsafe. -->
+    <string name="verify_fallback_not_sure">I\'m not sure about that one. Try another photo!</string>
+    <string name="verify_fallback_match">Great find!</string>
+    <string name="verify_fallback_miss">Not quite. Try another photo!</string>
 
     <string name="action_back">Back</string>
     <string name="action_cancel">Cancel</string>

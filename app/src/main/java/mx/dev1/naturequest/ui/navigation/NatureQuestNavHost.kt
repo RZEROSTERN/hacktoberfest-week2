@@ -14,6 +14,8 @@ import mx.dev1.naturequest.domain.hunt.PlaceType
 import mx.dev1.naturequest.ui.hunt.HuntScreen
 import mx.dev1.naturequest.ui.hunt.HuntViewModel
 import mx.dev1.naturequest.ui.setup.SetupScreen
+import mx.dev1.naturequest.ui.verify.VerifyScreen
+import mx.dev1.naturequest.ui.verify.VerifyViewModel
 
 @Serializable
 data object Setup
@@ -24,6 +26,10 @@ data class Hunt(
     val length: HuntLength,
     val ageRange: AgeRange,
 )
+
+/** Take and check a photo for one hunt item (its id in the current hunt). */
+@Serializable
+data class Verify(val itemId: Int)
 
 @Composable
 fun NatureQuestNavHost() {
@@ -42,7 +48,18 @@ fun NatureQuestNavHost() {
             val viewModel = hiltViewModel<HuntViewModel, HuntViewModel.Factory>(
                 creationCallback = { factory -> factory.create(settings) },
             )
-            HuntScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
+            HuntScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onFoundSomething = { itemId -> navController.navigate(Verify(itemId)) },
+            )
+        }
+        composable<Verify> { entry ->
+            val route = entry.toRoute<Verify>()
+            val viewModel = hiltViewModel<VerifyViewModel, VerifyViewModel.Factory>(
+                creationCallback = { factory -> factory.create(route.itemId) },
+            )
+            VerifyScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
         }
     }
 }
