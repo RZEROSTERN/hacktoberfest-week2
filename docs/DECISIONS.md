@@ -73,3 +73,21 @@ Update this file whenever a decision is made or changed (it feeds the write-up).
 - **Decision:** `SpikeActivity` lives in `src/debug/` (never in release). `/samples` is added as debug assets only. The run is started and read through adb (`--ez auto true`, logcat tag `NQ_SPIKE`, JSON report in app-private `files/`), and the activity shows over the lock screen and keeps the screen on.
 - **Why:** repeatable benchmarks without tapping the phone, and no test photos ever ship in a release APK.
 
+
+## D-016 Safety is a deterministic gate in code, not just a prompt (2026-10-05)
+- **Decision:** every generated item passes `SafetyValidator` before a child sees it. It matches whole words (English and Spanish, accents and case ignored) against lists of: touching/taking/approaching/eating verbs; water, heights, roads and vehicles; animals, insects, nests, mushrooms and hiding places; fruit, berries and hazards; and people. Unsafe, repeated, empty, over-long or odd items are rejected and the model is asked again for only what is missing, told what to avoid (up to 3 attempts, 1 retry after invalid JSON, 2 spare items requested). If it still falls short, the built-in safe list (string resources, EN and ES) fills the gap, so a hunt always has the requested number of items.
+- **Why:** the spike showed the prompt alone is not enough: the model produced "a coiled snake", "orange fungus" and "a bird's nest hidden in a hollow" even though the prompt forbade them.
+- **Trade-offs:** it over-blocks on purpose (for example "a street sign" and "something under the sky"); a rejected item is just regenerated. Birds, butterflies and feathers are allowed because they can be photographed from a distance. Photos of people are blocked as a privacy rule for children. Word lists are a safety net, not a replacement for the adult supervision the app asks for on the first screen.
+- **Guard tests:** every built-in fallback item (EN and ES, read straight from the XML) must pass the validator, and the real prompt files must render with the variables the code sends.
+
+## D-017 Load the model for each use and release it right after (2026-10-05)
+- **Decision:** `GenerateHuntUseCase` loads the engine, generates, and releases it in a `finally`. Photo verification will do the same.
+- **Why:** the model holds 2.2-2.6 GB while loaded and the next use is minutes away, while a warm reload costs only 0.4-0.8 s (see `docs/BENCHMARKS.md`). Verified on the phone: process memory goes from 1.8 GB to 247 MB when a generation is cancelled.
+
+## D-018 Generation parameters and prompt v2 (2026-10-05)
+- **Decision:** `hunt_generation_v2` replaces v1 (the `avoid` list and the spare items needed a new prompt variable). Temperature 0.8, a **fresh random seed per request**, and Spanish plus English examples with the instruction to write natural phrases.
+- **Why:** on the phone the same settings returned the identical hunt three times in a row: LiteRT-LM's `SamplerConfig.seed` defaults to 0, which makes sampling deterministic. And with English-only examples the Spanish items were abstract labels ("Estaca de piedra lisa"); with bilingual examples they became natural phrases ("Un tronco con grietas marcadas"). Verification keeps seed 0 and temperature 0.2 on purpose, so the same photo gets the same verdict.
+
+## D-019 Hunt settings travel in a type-safe route; ViewModel built with assisted injection (2026-10-05)
+- **Decision:** `Hunt(place, length, ageRange)` is a `@Serializable` navigation route and `HuntViewModel` receives `HuntSettings` through Hilt assisted injection, not a `SavedStateHandle`.
+- **Why:** the ViewModel stays a plain constructor in unit tests (no Android `Bundle`), and the route arguments survive process death, so the hunt is simply generated again. The route enums carry `@Keep` so their serializers survive minified builds (lint requires it).
