@@ -64,6 +64,26 @@ class ShippedContentTest {
         )
     }
 
+    private fun stringValue(stringsFile: String, name: String): String {
+        val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file(stringsFile))
+        val strings = document.getElementsByTagName("string")
+        for (i in 0 until strings.length) {
+            if (strings.item(i).attributes.getNamedItem("name").nodeValue == name) return strings.item(i).textContent
+        }
+        error("$name not found in $stringsFile")
+    }
+
+    @Test
+    fun `built-in verification feedback texts are safe to read to a child`() {
+        listOf("src/main/res/values/strings.xml", "src/main/res/values-es/strings.xml").forEach { path ->
+            listOf("verify_fallback_not_sure", "verify_fallback_match", "verify_fallback_miss").forEach { name ->
+                val text = stringValue(path, name)
+                assertTrue("$name in $path is empty", text.isNotBlank())
+                assertTrue("$name in $path must not tell a child to do anything unsafe: $text", !validator.containsUnsafeInstruction(text))
+            }
+        }
+    }
+
     @Test
     fun `hunt generation prompt renders with the variables the use case sends`() {
         val template = file("src/main/assets/prompts/hunt_generation_v2.txt").readText()
