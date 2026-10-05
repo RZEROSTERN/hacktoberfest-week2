@@ -113,3 +113,22 @@ Update this file whenever a decision is made or changed (it feeds the write-up).
 ## D-024 The hunt in progress is an in-memory singleton (2026-10-05)
 - **Decision:** `HuntSession` holds the items and found flags in memory, shared by the hunt, camera and (later) summary screens. Leaving the hunt screen ends it and deletes the photos. If Android kills the process, the hunt is lost.
 - **Why:** a hunt is a short outing; persisting it would add a database for little gain. History (step 8) is a separate, optional feature.
+
+## D-025 Hunt lifecycle: finish, leave, and who cleans up (2026-10-05)
+- **Decision:** a hunt ends two ways. **Finish** (the button, or finding every item) stops the clock and opens the summary; the hunt and its cached photos stay until the summary closes, and closing it forgets the hunt, deletes the photo cache and frees the voice. **Leave** (system Back, after a confirmation dialog) forgets the hunt and deletes the photos immediately. The hunt ViewModel therefore cleans up only when the hunt was not finished; otherwise it would wipe the data the summary is about to show, and cut off the summary speech.
+- **Why:** it satisfies "photos are kept only for the summary and deleted when the hunt ends" in both paths, and a stray back swipe by a child asks before throwing the hunt away.
+- **Not covered on a device:** "found every item, so go straight to the summary" (it needs a real match). It is a single `LaunchedEffect`; the state it reads (`allFound`) is unit tested.
+
+## D-026 Medal rule (2026-10-05)
+- **Decision:** gold for finding everything, silver for at least half, bronze for the rest. Going outside always earns at least bronze, even with nothing found; an empty hunt is bronze, never gold.
+- **Why:** this is a family outing, not an exam. A child who finished a hunt should leave with something, and "everything found" is the only way to a gold.
+
+## D-027 Reading aloud with the phone's own speech engine (2026-10-05)
+- **Decision:** Android `TextToSpeech` behind a `Speaker` interface, started on first use and released when the hunt flow ends. It speaks in the device language (falling back from es-MX to es), prefers a voice that works offline, and is silent, with everything still on screen, if the phone has no voice for the language. The manifest declares `<queries>` for `TTS_SERVICE` (Android 11+ package visibility). All spoken text comes from string resources through `HuntTexts`, so it follows the device language.
+- **What is read:** the hunt list and an invitation to put the phone away "always with an adult" when the list is ready (with Read again / Stop), the model's feedback and hint after each photo, and a summary at the end.
+- **Verified on the Pixel 10:** the engine started speaking in Spanish when the list appeared, Stop silenced it, and the summary was spoken. The synthesized audio itself was not heard by me; I checked the engine's own start events in the log.
+- **Caveat:** the voice is a system component. If a phone has no offline voice installed for its language, there is no speech (the app does not try the network).
+
+## D-028 "Save to gallery" is explicit and saves the small photos (2026-10-05)
+- **Decision:** photos leave the app's private cache only when the player taps "Save to gallery" on the summary. They go to `Pictures/Nature Quest` through MediaStore (no storage permission needed on Android 10+). What is saved is the 640 px version used for verification, not a full-resolution original, because the original is never kept.
+- **Verified on the Pixel 10** with a drawn test image through the real saver (a debug check in the spike screen); the test file and its gallery entry were then deleted.
