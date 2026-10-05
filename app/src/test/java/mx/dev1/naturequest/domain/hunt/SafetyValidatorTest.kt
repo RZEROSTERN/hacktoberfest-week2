@@ -61,6 +61,10 @@ class SafetyValidatorTest {
         assertRejected("Una hormiga en una hoja")
         assertRejected("Un hongo naranja")
         assertRejected("Un perro jugando")
+        // Found on the phone: a cloud "shaped like a deer" got through while deer was missing from the list.
+        assertRejected("Una nube con forma de ciervo")
+        assertRejected("A cloud shaped like a deer")
+        assertRejected("Un zorro entre los arbustos")
     }
 
     @Test
