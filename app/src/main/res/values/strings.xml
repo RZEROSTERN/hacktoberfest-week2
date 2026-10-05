@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Nature Quest</string>
+
+    <string name="setup_title">Ready for a nature hunt?</string>
+    <string name="setup_subtitle">Find things outside, together. Keep the phone in your pocket.</string>
+    <string name="setup_start">Start hunt</string>
+
+    <string name="hunt_placeholder_title">Hunt in progress</string>
+    <string name="hunt_placeholder_body">Your hunt list will show up here.</string>
+
+    <string name="action_back">Back</string>
+</resources>
