@@ -5,6 +5,9 @@ import mx.dev1.naturequest.domain.inference.InferenceRequest
 import mx.dev1.naturequest.domain.inference.InferenceResult
 import mx.dev1.naturequest.domain.inference.InferenceStats
 import mx.dev1.naturequest.domain.prompt.PromptSource
+import mx.dev1.naturequest.domain.verification.PhotoPreprocessor
+import mx.dev1.naturequest.domain.verification.PhotoStore
+import mx.dev1.naturequest.domain.verification.VerificationFallbacks
 
 /**
  * Scripted stand-in for the on-device model. [responder] receives the request and the 1-based call
@@ -58,3 +61,43 @@ class FakePromptSource : PromptSource {
 /** Builds the JSON the model is asked to return. */
 fun huntJson(vararg items: String): String =
     """{"items": [${items.joinToString(", ") { "\"$it\"" }}]}"""
+
+/** Builds the JSON the model is asked to return for a photo check. */
+fun verificationJson(match: Boolean, message: String, hint: String = ""): String =
+    """{"match": $match, "message": "$message", "hint": "$hint"}"""
+
+class FakePhotoPreprocessor : PhotoPreprocessor {
+    val calls = mutableListOf<Pair<ByteArray, Int>>()
+
+    /** The "small JPEG" the rest of the app receives. */
+    val prepared = byteArrayOf(1, 2, 3)
+
+    override suspend fun prepare(raw: ByteArray, rotationDegrees: Int): ByteArray {
+        calls += raw to rotationDegrees
+        return prepared
+    }
+}
+
+class FakePhotoStore : PhotoStore {
+    val saved = mutableMapOf<Int, ByteArray>()
+    var clearCalls = 0
+        private set
+
+    override suspend fun save(itemId: Int, jpeg: ByteArray): String {
+        saved[itemId] = jpeg
+        return "/cache/item-$itemId.jpg"
+    }
+
+    override fun clear() {
+        clearCalls++
+        saved.clear()
+    }
+}
+
+class FakeVerificationFallbacks : VerificationFallbacks {
+    override fun notSure() = "NOT_SURE"
+
+    override fun genericMatch() = "GENERIC_MATCH"
+
+    override fun genericMiss() = "GENERIC_MISS"
+}
