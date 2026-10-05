@@ -16,6 +16,11 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "0.1.0"
+
+        // LiteRT-LM ships arm64-v8a and x86_64; the model needs a real phone, so arm64 only.
+        ndk {
+            abiFilters += "arm64-v8a"
+        }
     }
 
     buildTypes {
@@ -33,6 +38,13 @@ android {
         compose = true
     }
 
+    sourceSets {
+        // Spike only: /samples photos are bundled into debug builds, never into release.
+        getByName("debug") {
+            assets.directories.add(rootProject.file("samples").path)
+        }
+    }
+
     lint {
         abortOnError = true
         warningsAsErrors = true
@@ -40,6 +52,8 @@ android {
         error += setOf("MissingTranslation", "ExtraTranslation", "HardcodedText")
         // Version-bump nags are noise for a time-boxed build; versions live in the catalog.
         disable += setOf("GradleDependency", "NewerVersionAvailable", "AndroidGradlePluginVersion")
+        // Phones only: the on-device model runs on arm64 hardware, so x86_64 (ChromeOS) is not shipped.
+        disable += "ChromeOsAbiSupport"
     }
 }
 
@@ -57,6 +71,7 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.litertlm.android)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
 

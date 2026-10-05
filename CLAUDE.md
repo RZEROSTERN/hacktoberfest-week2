@@ -17,6 +17,7 @@ Needs JDK 17+ (see Gotchas).
 - Install on device: `./gradlew installDebug`
 - Push the dev model (debug build installed; lands in app-private `files/`):
   `adb push <path>/gemma-4-E2B-it.litertlm /data/local/tmp/ && adb shell "run-as mx.dev1.naturequest sh -c 'mkdir -p files && cp /data/local/tmp/gemma-4-E2B-it.litertlm files/'" && adb shell rm /data/local/tmp/gemma-4-E2B-it.litertlm`
+- Benchmark on the phone (debug only, results in `docs/BENCHMARKS.md`): `adb shell am start -n mx.dev1.naturequest/.debug.SpikeActivity --ez auto true --es backend CPU --ei maxSide 640 --ei budget 140`, then `adb logcat -s NQ_SPIKE`
 
 ## Git: GitFlow, non-stacked PRs
 - Production branch is `master`. NEVER create, push, reference or target a branch named `main`.
@@ -44,4 +45,7 @@ Needs JDK 17+ (see Gotchas).
 - AGP 9 has built-in Kotlin: do not apply `org.jetbrains.kotlin.android`. Use KSP, not kapt.
 - Lint `HardcodedText` only checks XML. Strings hardcoded in Compose pass lint, so review for them.
 - Dev model location is app-private `files/`, the same place the release download goes. `run-as` only works on debug builds.
+- LiteRT-LM: its `main` branch is ahead of the pinned 0.17.1 AAR, so check APIs with `javap` on the AAR. `Message` has no `.text`, use `toString()`. Cancelling the `sendMessageAsync` Flow does not stop native inference: call `conversation.cancelProcess()`.
+- Android regex (ICU) throws on a bare `}` that the JVM accepts. Escape both braces; JVM unit tests will not catch it.
+- On the Pixel 10 the CPU backend beats GPU, decode is only ~7-23 tok/s, and the phone slows ~1.6x under sustained load. Keep model output short and benchmark in the slow state.
 - `.litertlm` files, keystores and `local.properties` are gitignored. Never commit them.

@@ -12,6 +12,8 @@ paths:
 - Prompts live in versioned files under `app/src/main/assets/prompts/` (for example `hunt_generation_v1.txt`), never inline in Kotlin. Bump the version when a prompt changes and note why in `docs/DECISIONS.md`. Prompts and responses follow the device language.
 - Safety is enforced twice: in the prompt and in code. Validate every generated item and reject and regenerate any that breaks the rules in `CLAUDE.md`.
 - Model loading and inference always run off the main thread (inject the dispatcher so tests can replace it). Engine initialization is blocking.
+- Cancelling a coroutine must also stop native inference: call `conversation.cancelProcess()` (the Flow does not).
+- Decode is slow on the target phone (about 7-23 tok/s), so keep each prompt's answer short and cap `maxOutputTokens`. Defaults: CPU backend, 140 visual tokens, photos downscaled to 640 px. Numbers are in `docs/BENCHMARKS.md`.
 - Release the engine when it is not needed (hunt over, app backgrounded, ViewModel cleared). It holds gigabytes of memory.
 - Photos are handled in memory and are never uploaded. This layer makes no network calls except the model download.
 - Check the official LiteRT-LM docs before using its API. Do not guess.
