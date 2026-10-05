@@ -128,6 +128,7 @@ class SafetyValidator @Inject constructor() {
             "ant ants anthill beetle beetles caterpillar worm worms centipede millipede lizard gecko iguana",
             "frog toad bat rat rats rodent dog dogs cat cats animal animals creature creatures wildlife horse",
             "cow bull goat sheep pig mushroom mushrooms fungus fungi toadstool mold mould fly flies mosquito",
+            "deer fox wolf coyote bear monkey tiger lion elephant rabbit skunk raccoon opossum turtle fish",
             "nest nests hive burrow hole holes hollow cave under beneath underneath inside hidden hiding",
             // Things to pick, eat or that can hurt (English)
             "berry berries fruit fruits thorn thorns thorny nettle poison poisonous toxic sharp glass needle",
@@ -153,6 +154,8 @@ class SafetyValidator @Inject constructor() {
             "ciempies lagartija lagarto iguana rana sapo murcielago rata raton perro perros gato gatos animal",
             "animales criatura criaturas caballo vaca toro cabra oveja cerdo hongo hongos seta setas moho",
             "mosca moscas mosquito nido nidos colmena madriguera agujero hoyo hueco cueva debajo escondido",
+            "ciervo venado zorro lobo coyote oso mono tigre leon elefante conejo zorrillo mapache tlacuache",
+            "tortuga pez peces",
             "escondida oculto oculta",
             // Things to pick, eat or that can hurt (Spanish)
             "baya bayas fruta frutas fruto frutos espina espinas espinoso ortiga veneno venenoso toxico filoso",

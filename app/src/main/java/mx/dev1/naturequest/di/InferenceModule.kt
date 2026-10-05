@@ -1,6 +1,8 @@
 package mx.dev1.naturequest.di
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.storage.StorageManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -12,7 +14,11 @@ import mx.dev1.naturequest.data.hunt.SystemTimeSource
 import mx.dev1.naturequest.data.hunt.ResourceFallbackItems
 import mx.dev1.naturequest.data.image.DownscalingPhotoPreprocessor
 import mx.dev1.naturequest.data.inference.LiteRtInferenceEngine
+import mx.dev1.naturequest.data.model.HttpDownloadSource
+import mx.dev1.naturequest.data.model.ModelDownloader
+import mx.dev1.naturequest.data.model.ModelSpec
 import mx.dev1.naturequest.data.model.ModelStore
+import mx.dev1.naturequest.data.network.ConnectivityNetworkInfo
 import mx.dev1.naturequest.data.photos.CachePhotoStore
 import mx.dev1.naturequest.data.photos.MediaStoreGallerySaver
 import mx.dev1.naturequest.data.prompts.PromptRepository
@@ -24,12 +30,17 @@ import mx.dev1.naturequest.domain.hunt.GallerySaver
 import mx.dev1.naturequest.domain.hunt.HuntSession
 import mx.dev1.naturequest.domain.hunt.TimeSource
 import mx.dev1.naturequest.domain.inference.InferenceEngine
+import mx.dev1.naturequest.domain.model.ModelAvailability
+import mx.dev1.naturequest.domain.model.ModelDownloading
+import mx.dev1.naturequest.domain.model.NetworkInfo
 import mx.dev1.naturequest.domain.prompt.PromptSource
 import mx.dev1.naturequest.domain.speech.HuntTexts
 import mx.dev1.naturequest.domain.speech.Speaker
 import mx.dev1.naturequest.domain.verification.PhotoPreprocessor
 import mx.dev1.naturequest.domain.verification.PhotoStore
 import mx.dev1.naturequest.domain.verification.VerificationFallbacks
+import java.io.File
+import java.io.IOException
 import javax.inject.Singleton
 
 @Module
@@ -43,6 +54,12 @@ abstract class InferenceModule {
 
     @Binds
     abstract fun bindHuntSession(impl: InMemoryHuntSession): HuntSession
+
+    @Binds
+    abstract fun bindModelAvailability(impl: ModelStore): ModelAvailability
+
+    @Binds
+    abstract fun bindNetworkInfo(impl: ConnectivityNetworkInfo): NetworkInfo
 
     @Binds
     abstract fun bindTimeSource(impl: SystemTimeSource): TimeSource
@@ -66,6 +83,26 @@ abstract class InferenceModule {
     abstract fun bindVerificationFallbacks(impl: ResourceVerificationFallbacks): VerificationFallbacks
 
     companion object {
+        @Provides
+        fun provideModelDownloader(@ApplicationContext context: Context, modelStore: ModelStore): ModelDownloading =
+            ModelDownloader(
+                spec = ModelSpec.GEMMA_4_E2B,
+                directory = modelStore.directory,
+                source = HttpDownloadSource(),
+                freeSpaceBytes = allocatableBytes(context),
+            )
+
+        /** Space the app can really get, counting cache the system would clear to make room. */
+        @SuppressLint("UsableSpace")
+        private fun allocatableBytes(context: Context): (File) -> Long = { directory ->
+            val storage = context.getSystemService(StorageManager::class.java)
+            try {
+                storage.getAllocatableBytes(storage.getUuidForPath(directory))
+            } catch (e: IOException) {
+                directory.usableSpace // the plain figure is still a safe answer
+            }
+        }
+
         /** One engine for the whole app: requests are serialized and the model is loaded on demand. */
         @Provides
         @Singleton

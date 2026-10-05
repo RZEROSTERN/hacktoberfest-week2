@@ -49,6 +49,7 @@ fun HuntScreen(
     onBack: () -> Unit,
     onFoundSomething: (itemId: Int) -> Unit,
     onFinished: () -> Unit,
+    onDownloadModel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -79,6 +80,7 @@ fun HuntScreen(
         onReadAloud = viewModel::readAloud,
         onStopReading = viewModel::stopReading,
         onFinish = finish,
+        onDownloadModel = onDownloadModel,
         modifier = modifier,
     )
     if (confirmLeave) {
@@ -107,6 +109,7 @@ private fun HuntContent(
     onReadAloud: () -> Unit,
     onStopReading: () -> Unit,
     onFinish: () -> Unit,
+    onDownloadModel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -120,7 +123,7 @@ private fun HuntContent(
             when (state) {
                 is HuntUiState.Generating -> GeneratingContent(state.progress, onCancel)
                 is HuntUiState.Ready -> ReadyContent(state.items, speaking, onFoundSomething, onReadAloud, onStopReading, onFinish)
-                is HuntUiState.Failed -> FailedContent(state.reason, onRetry, onBack)
+                is HuntUiState.Failed -> FailedContent(state.reason, onRetry, onBack, onDownloadModel)
             }
         }
     }
@@ -210,7 +213,7 @@ private fun HuntItemCard(item: HuntItem, onClick: () -> Unit) {
 }
 
 @Composable
-private fun FailedContent(reason: FailureReason, onRetry: () -> Unit, onBack: () -> Unit) {
+private fun FailedContent(reason: FailureReason, onRetry: () -> Unit, onBack: () -> Unit, onDownloadModel: () -> Unit) {
     Text(
         text = stringResource(
             when (reason) {
@@ -220,8 +223,17 @@ private fun FailedContent(reason: FailureReason, onRetry: () -> Unit, onBack: ()
         ),
         style = MaterialTheme.typography.headlineMedium,
     )
-    Button(onClick = onRetry, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
-        Text(text = stringResource(R.string.hunt_retry))
+    if (reason == FailureReason.MODEL_MISSING) {
+        Button(onClick = onDownloadModel, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
+            Text(text = stringResource(R.string.setup_download_model))
+        }
+        OutlinedButton(onClick = onRetry, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
+            Text(text = stringResource(R.string.hunt_retry))
+        }
+    } else {
+        Button(onClick = onRetry, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
+            Text(text = stringResource(R.string.hunt_retry))
+        }
     }
     OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
         Text(text = stringResource(R.string.action_back))
@@ -232,7 +244,7 @@ private fun FailedContent(reason: FailureReason, onRetry: () -> Unit, onBack: ()
 @Composable
 private fun HuntGeneratingPreview() {
     NatureQuestTheme {
-        HuntContent(HuntUiState.Generating(HuntGenerationProgress.WRITING_LIST), false, {}, {}, {}, {}, {}, {}, {})
+        HuntContent(HuntUiState.Generating(HuntGenerationProgress.WRITING_LIST), false, {}, {}, {}, {}, {}, {}, {}, {})
     }
 }
 
@@ -248,7 +260,7 @@ private fun HuntReadyPreview() {
                     HuntItem(2, "Bark with moss on it"),
                 ),
             ),
-            false, {}, {}, {}, {}, {}, {}, {},
+            false, {}, {}, {}, {}, {}, {}, {}, {},
         )
     }
 }

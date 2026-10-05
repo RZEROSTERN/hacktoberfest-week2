@@ -56,6 +56,7 @@ import mx.dev1.naturequest.ui.hunt.FailureReason
 fun VerifyScreen(
     viewModel: VerifyViewModel,
     onBack: () -> Unit,
+    onDownloadModel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -73,7 +74,7 @@ fun VerifyScreen(
                 onTryAgain = viewModel::retake,
                 onBack = onBack,
             )
-            is VerifyUiState.Failed -> FailedContent(current.reason, onRetry = viewModel::retake, onBack = onBack)
+            is VerifyUiState.Failed -> FailedContent(current.reason, onRetry = viewModel::retake, onBack = onBack, onDownloadModel = onDownloadModel)
         }
     }
 }
@@ -251,7 +252,8 @@ private fun ResultContent(
 }
 
 @Composable
-private fun FailedContent(reason: FailureReason, onRetry: () -> Unit, onBack: () -> Unit) {
+private fun FailedContent(reason: FailureReason, onRetry: () -> Unit, onBack: () -> Unit, onDownloadModel: () -> Unit) {
+    val modelMissing = reason == FailureReason.MODEL_MISSING
     MessageContent(
         title = stringResource(
             when (reason) {
@@ -259,8 +261,8 @@ private fun FailedContent(reason: FailureReason, onRetry: () -> Unit, onBack: ()
                 FailureReason.GENERIC -> R.string.verify_error_generic
             },
         ),
-        primaryLabel = stringResource(R.string.verify_try_again),
-        onPrimary = onRetry,
+        primaryLabel = stringResource(if (modelMissing) R.string.setup_download_model else R.string.verify_try_again),
+        onPrimary = if (modelMissing) onDownloadModel else onRetry,
         onBack = onBack,
     )
 }

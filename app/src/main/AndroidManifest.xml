@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- The only network use in the app: the one-time download of the AI model (see ModelDownloader).
+         Nothing the player does, no photo and no hunt, is ever sent anywhere. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <!-- Used only to check the player's photos on the phone. Photos are never uploaded. -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature
