@@ -126,13 +126,14 @@ class SpikeRunner(
             currentCoroutineContext().ensureActive()
             say("Generating: ${case.place}, ${case.count} items, age ${case.ageRange}, ${case.language}")
             val prompt = prompts.render(
-                "hunt_generation_v1",
+                "hunt_generation_v2",
                 mapOf(
                     "count" to case.count.toString(),
                     "place" to case.place,
                     "month" to month,
                     "age_range" to case.ageRange,
                     "language" to case.language,
+                    "avoid" to "nothing yet",
                 ),
             )
             val run = try {

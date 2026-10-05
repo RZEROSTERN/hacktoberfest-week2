@@ -23,6 +23,7 @@ import mx.dev1.naturequest.domain.inference.InferenceEngine
 import mx.dev1.naturequest.domain.inference.InferenceRequest
 import mx.dev1.naturequest.domain.inference.InferenceResult
 import mx.dev1.naturequest.domain.inference.InferenceStats
+import mx.dev1.naturequest.domain.inference.ModelNotAvailableException
 import kotlin.coroutines.cancellation.CancellationException
 
 /**
@@ -48,7 +49,9 @@ class LiteRtInferenceEngine(
         withContext(dispatcher) {
             mutex.withLock {
                 if (engine != null) return@withLock
-                check(modelStore.isAvailable()) { "Model file not found: ${modelStore.modelFile()}" }
+                if (!modelStore.isAvailable()) {
+                    throw ModelNotAvailableException("Model file not found: ${modelStore.modelFile()}")
+                }
                 // Engine-reported timings (time to first token, tokens per second).
                 ExperimentalFlags.enableBenchmark = true
                 ExperimentalFlags.visualTokenBudget = options.visualTokenBudget
@@ -74,7 +77,7 @@ class LiteRtInferenceEngine(
             val loaded = checkNotNull(engine) { "Model is not loaded" }
             val startedAt = SystemClock.elapsedRealtime()
             val config = ConversationConfig(
-                samplerConfig = SamplerConfig(topK = 40, topP = 0.95, temperature = request.temperature),
+                samplerConfig = SamplerConfig(topK = 40, topP = 0.95, temperature = request.temperature, seed = request.seed),
                 maxOutputToken = request.maxOutputTokens,
                 thinkingConfig = ThinkingConfig(enableThinking = false),
             )
