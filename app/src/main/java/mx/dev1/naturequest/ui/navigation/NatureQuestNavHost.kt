@@ -11,6 +11,8 @@ import mx.dev1.naturequest.domain.hunt.AgeRange
 import mx.dev1.naturequest.domain.hunt.HuntLength
 import mx.dev1.naturequest.domain.hunt.HuntSettings
 import mx.dev1.naturequest.domain.hunt.PlaceType
+import mx.dev1.naturequest.ui.download.DownloadScreen
+import mx.dev1.naturequest.ui.download.DownloadViewModel
 import mx.dev1.naturequest.ui.hunt.HuntScreen
 import mx.dev1.naturequest.ui.hunt.HuntViewModel
 import mx.dev1.naturequest.ui.setup.SetupScreen
@@ -29,6 +31,10 @@ data class Hunt(
     val ageRange: AgeRange,
 )
 
+/** One-time download of the AI model, with progress. */
+@Serializable
+data object Download
+
 /** How the hunt went: medal, time outside and the photos of the finds. */
 @Serializable
 data object Summary
@@ -46,6 +52,7 @@ fun NatureQuestNavHost() {
                 onStart = { settings ->
                     navController.navigate(Hunt(settings.place, settings.length, settings.ageRange))
                 },
+                onDownloadModel = { navController.navigate(Download) },
             )
         }
         composable<Hunt> { entry ->
@@ -61,6 +68,7 @@ fun NatureQuestNavHost() {
                 onFinished = {
                     navController.navigate(Summary) { popUpTo<Hunt> { inclusive = true } }
                 },
+                onDownloadModel = { navController.navigate(Download) },
             )
         }
         composable<Verify> { entry ->
@@ -68,7 +76,18 @@ fun NatureQuestNavHost() {
             val viewModel = hiltViewModel<VerifyViewModel, VerifyViewModel.Factory>(
                 creationCallback = { factory -> factory.create(route.itemId) },
             )
-            VerifyScreen(viewModel = viewModel, onBack = { navController.popBackStack() })
+            VerifyScreen(
+                viewModel = viewModel,
+                onBack = { navController.popBackStack() },
+                onDownloadModel = { navController.navigate(Download) },
+            )
+        }
+        composable<Download> {
+            DownloadScreen(
+                viewModel = hiltViewModel<DownloadViewModel>(),
+                onDone = { navController.popBackStack() },
+                onBack = { navController.popBackStack() },
+            )
         }
         composable<Summary> {
             SummaryScreen(

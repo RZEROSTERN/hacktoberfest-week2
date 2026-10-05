@@ -88,6 +88,26 @@
     <string name="speech_hunt_ready">Your hunt is ready! Put the phone away and go look for these things, always with an adult: %1$s Have fun!</string>
     <string name="speech_summary">Hunt complete! You found %1$d of %2$d. %3$s. You earned a %4$s!</string>
 
+    <string name="setup_model_needed">To make hunts, this phone needs the AI model. It is a one-time download.</string>
+    <string name="setup_download_model">Download the AI model</string>
+
+    <string name="download_title">Get the AI model</string>
+    <string name="download_body">Nature Quest uses an AI that runs on your phone, so it works even with no signal. It needs a one-time download of %1$s. Your photos and hunts never leave the phone.</string>
+    <string name="download_wifi">Wi-Fi is recommended.</string>
+    <string name="download_metered">You are on a metered connection, such as mobile data. This is a large download.</string>
+    <string name="download_start">Download</string>
+    <string name="download_continue">Continue download</string>
+    <string name="download_partial">%1$s already downloaded.</string>
+    <string name="download_downloading">Downloading…</string>
+    <string name="download_progress">%1$s of %2$s (%3$d%%)</string>
+    <string name="download_verifying">Checking the file…</string>
+    <string name="download_done_title">The AI is ready!</string>
+    <string name="download_done_button">Continue</string>
+    <string name="download_error_network">The connection was lost. You can continue where it stopped.</string>
+    <string name="download_error_space">There is not enough free space on this phone.</string>
+    <string name="download_error_server">The download server did not answer correctly. Try again later.</string>
+    <string name="download_error_corrupt">The downloaded file was damaged, so it was deleted. Please download it again.</string>
+
     <string name="action_back">Back</string>
     <string name="action_cancel">Cancel</string>
 

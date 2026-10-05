@@ -26,6 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import mx.dev1.naturequest.R
 import mx.dev1.naturequest.domain.hunt.AgeRange
@@ -37,16 +39,19 @@ import mx.dev1.naturequest.ui.theme.NatureQuestTheme
 @Composable
 fun SetupScreen(
     onStart: (HuntSettings) -> Unit,
+    onDownloadModel: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SetupViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.refreshModel() }
     SetupContent(
         state = state,
         onPlace = viewModel::selectPlace,
         onLength = viewModel::selectLength,
         onAge = viewModel::selectAgeRange,
         onStart = { onStart(state.toSettings()) },
+        onDownloadModel = onDownloadModel,
         modifier = modifier,
     )
 }
@@ -58,6 +63,7 @@ private fun SetupContent(
     onLength: (HuntLength) -> Unit,
     onAge: (AgeRange) -> Unit,
     onStart: () -> Unit,
+    onDownloadModel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -100,13 +106,25 @@ private fun SetupContent(
                 onSelect = onAge,
                 columns = 3,
             )
-            Button(
-                onClick = onStart,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 72.dp),
-            ) {
-                Text(text = stringResource(R.string.setup_start))
+            if (state.modelReady) {
+                Button(
+                    onClick = onStart,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 72.dp),
+                ) {
+                    Text(text = stringResource(R.string.setup_start))
+                }
+            } else {
+                Text(text = stringResource(R.string.setup_model_needed), style = MaterialTheme.typography.bodyLarge)
+                Button(
+                    onClick = onDownloadModel,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 72.dp),
+                ) {
+                    Text(text = stringResource(R.string.setup_download_model))
+                }
             }
         }
     }
@@ -176,6 +194,6 @@ private fun OptionTile(
 @Composable
 private fun SetupContentPreview() {
     NatureQuestTheme {
-        SetupContent(state = SetupUiState(), onPlace = {}, onLength = {}, onAge = {}, onStart = {})
+        SetupContent(state = SetupUiState(), onPlace = {}, onLength = {}, onAge = {}, onStart = {}, onDownloadModel = {})
     }
 }

@@ -87,6 +87,26 @@
     <string name="speech_hunt_ready">¡Su búsqueda está lista! Guarden el teléfono y vayan a buscar estas cosas, siempre con un adulto: %1$s ¡Diviértanse!</string>
     <string name="speech_summary">¡Búsqueda completa! Encontraron %1$d de %2$d. %3$s. ¡Ganaron la %4$s!</string>
 
+    <string name="setup_model_needed">Para crear búsquedas, este teléfono necesita el modelo de IA. Es una descarga única.</string>
+    <string name="setup_download_model">Descargar el modelo de IA</string>
+
+    <string name="download_title">Descargar el modelo de IA</string>
+    <string name="download_body">Nature Quest usa una IA que funciona en su teléfono, así que sirve aunque no haya señal. Necesita una descarga única de %1$s. Sus fotos y búsquedas nunca salen del teléfono.</string>
+    <string name="download_wifi">Se recomienda usar Wi-Fi.</string>
+    <string name="download_metered">Están en una conexión con límite de datos, como los datos móviles. Es una descarga grande.</string>
+    <string name="download_start">Descargar</string>
+    <string name="download_continue">Continuar descarga</string>
+    <string name="download_partial">Ya se descargaron %1$s.</string>
+    <string name="download_downloading">Descargando…</string>
+    <string name="download_progress">%1$s de %2$s (%3$d%%)</string>
+    <string name="download_verifying">Revisando el archivo…</string>
+    <string name="download_done_title">¡La IA está lista!</string>
+    <string name="download_done_button">Continuar</string>
+    <string name="download_error_network">Se perdió la conexión. Pueden continuar desde donde se quedó.</string>
+    <string name="download_error_space">No hay suficiente espacio libre en este teléfono.</string>
+    <string name="download_error_server">El servidor de descarga no respondió bien. Intenten más tarde.</string>
+    <string name="download_error_corrupt">El archivo descargado estaba dañado, así que se borró. Descárguenlo de nuevo.</string>
+
     <string name="action_back">Atrás</string>
     <string name="action_cancel">Cancelar</string>
 
