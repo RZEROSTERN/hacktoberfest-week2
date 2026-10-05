@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="setup_title">¿Listos para una búsqueda en la naturaleza?</string>
-    <string name="setup_subtitle">Encuentren cosas al aire libre, juntos. Guarden el teléfono en el bolsillo.</string>
+    <string name="setup_adult_notice">Siempre con un adulto. Solo miren y tomen fotos: nunca corten ni toquen nada.</string>
+    <string name="setup_place_title">¿A dónde van?</string>
+    <string name="setup_length_title">¿Cuántas cosas quieren encontrar?</string>
+    <string name="setup_age_title">Edad del jugador más pequeño</string>
     <string name="setup_start">Empezar búsqueda</string>
 
-    <string name="hunt_placeholder_title">Búsqueda en curso</string>
-    <string name="hunt_placeholder_body">Aquí aparecerá la lista de la búsqueda.</string>
+    <string name="place_park">Parque</string>
+    <string name="place_forest">Bosque</string>
+    <string name="place_garden">Jardín</string>
+    <string name="place_urban_walk">Paseo urbano</string>
+
+    <string name="length_short">5</string>
+    <string name="length_medium">8</string>
+    <string name="length_long">12</string>
+
+    <string name="age_4_to_6">4–6</string>
+    <string name="age_7_to_9">7–9</string>
+    <string name="age_10_plus">10+</string>
+
+    <string name="hunt_loading_model">Despertando a la IA…</string>
+    <string name="hunt_writing_list">Escribiendo su lista…</string>
+    <string name="hunt_wait_hint">Todo pasa en este teléfono, sin internet. Tarda unos segundos.</string>
+    <string name="hunt_ready_title">Su búsqueda</string>
+    <string name="hunt_ready_hint">¡Guarden el teléfono y vayan a encontrar estas cosas!</string>
+    <string name="hunt_error_model_missing">El modelo de IA todavía no está en este teléfono.</string>
+    <string name="hunt_error_generic">Algo salió mal al preparar la búsqueda.</string>
+    <string name="hunt_retry">Intentar de nuevo</string>
 
     <string name="action_back">Atrás</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Elementos seguros incluidos, por si la IA no logra hacer suficientes. Solo fotos: nunca cortar ni tocar. -->
+    <string-array name="fallback_hunt_items">
+        <item>Una hoja roja</item>
+        <item>Algo con forma de espiral</item>
+        <item>Una pluma</item>
+        <item>Corteza con musgo</item>
+        <item>Una flor con cinco pétalos</item>
+        <item>Una hoja amarilla o naranja</item>
+        <item>Algo perfectamente redondo</item>
+        <item>Un árbol con la corteza muy rugosa</item>
+        <item>Una hoja con las puntas afiladas</item>
+        <item>Una nube con una forma interesante</item>
+        <item>Algo azul</item>
+        <item>Una piedra lisa y gris</item>
+        <item>Un árbol muy alto</item>
+        <item>Ramas formando un dibujo contra el cielo</item>
+    </string-array>
 </resources>

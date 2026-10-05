@@ -3,11 +3,53 @@
     <string name="app_name" translatable="false">Nature Quest</string>
 
     <string name="setup_title">Ready for a nature hunt?</string>
-    <string name="setup_subtitle">Find things outside, together. Keep the phone in your pocket.</string>
+    <string name="setup_adult_notice">Always hunt with an adult. Just look and take photos: never pick or touch anything.</string>
+    <string name="setup_place_title">Where are you going?</string>
+    <string name="setup_length_title">How many things to find?</string>
+    <string name="setup_age_title">Youngest player\'s age</string>
     <string name="setup_start">Start hunt</string>
 
-    <string name="hunt_placeholder_title">Hunt in progress</string>
-    <string name="hunt_placeholder_body">Your hunt list will show up here.</string>
+    <string name="place_park">Park</string>
+    <string name="place_forest">Forest</string>
+    <string name="place_garden">Garden</string>
+    <string name="place_urban_walk">Urban walk</string>
+
+    <string name="length_short">5</string>
+    <string name="length_medium">8</string>
+    <string name="length_long">12</string>
+
+    <string name="age_4_to_6">4–6</string>
+    <string name="age_7_to_9">7–9</string>
+    <string name="age_10_plus">10+</string>
+
+    <string name="hunt_loading_model">Waking up the AI…</string>
+    <string name="hunt_writing_list">Writing your hunt list…</string>
+    <string name="hunt_wait_hint">It all happens on this phone, with no internet. It takes a few seconds.</string>
+    <string name="hunt_ready_title">Your hunt</string>
+    <string name="hunt_ready_hint">Put the phone away and go find these things!</string>
+    <string name="hunt_error_model_missing">The AI model is not on this phone yet.</string>
+    <string name="hunt_error_generic">Something went wrong while making your hunt.</string>
+    <string name="hunt_retry">Try again</string>
+    <string name="hunt_item_numbered" translatable="false">%1$d. %2$s</string>
 
     <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Safe built-in items, used if the AI cannot make enough valid ones. Photograph only: never pick or touch. -->
+    <string-array name="fallback_hunt_items">
+        <item>A red leaf</item>
+        <item>Something with a spiral shape</item>
+        <item>A feather</item>
+        <item>Bark with moss on it</item>
+        <item>A flower with five petals</item>
+        <item>A yellow or orange leaf</item>
+        <item>Something perfectly round</item>
+        <item>A tree with very rough bark</item>
+        <item>A leaf with pointy edges</item>
+        <item>A cloud with an interesting shape</item>
+        <item>Something blue</item>
+        <item>A smooth gray stone</item>
+        <item>A very tall tree</item>
+        <item>Branches making a pattern against the sky</item>
+    </string-array>
 </resources>

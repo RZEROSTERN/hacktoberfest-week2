@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
+        <!-- Debug builds only: lets adb drive the app on a locked phone during on-device tests. -->
+        <activity
+            android:name=".MainActivity"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+
         <!-- Debug-only benchmark screen. Shows over the lock screen so adb can run it headlessly. -->
         <activity
             android:name=".debug.SpikeActivity"
