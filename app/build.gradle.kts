@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -23,9 +25,25 @@ android {
         }
     }
 
+    signingConfigs {
+        // Signing material lives outside git (see keystore.properties.example). Without it the release
+        // build is simply unsigned, so anyone can still build the project.
+        val keystoreFile = rootProject.file("keystore.properties")
+        if (keystoreFile.isFile) {
+            create("release") {
+                val keystore = Properties().apply { keystoreFile.inputStream().use { load(it) } }
+                storeFile = rootProject.file(keystore.getProperty("storeFile"))
+                storePassword = keystore.getProperty("storePassword")
+                keyAlias = keystore.getProperty("keyAlias")
+                keyPassword = keystore.getProperty("keyPassword")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfigs.findByName("release")?.let { signingConfig = it }
         }
     }
 
