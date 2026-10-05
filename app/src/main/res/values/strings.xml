@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Nature Quest</string>
+
+    <string name="setup_title">Ready for a nature hunt?</string>
+    <string name="setup_adult_notice">Always hunt with an adult. Just look and take photos: never pick or touch anything.</string>
+    <string name="setup_place_title">Where are you going?</string>
+    <string name="setup_length_title">How many things to find?</string>
+    <string name="setup_age_title">Youngest player\'s age</string>
+    <string name="setup_start">Start hunt</string>
+
+    <string name="place_park">Park</string>
+    <string name="place_forest">Forest</string>
+    <string name="place_garden">Garden</string>
+    <string name="place_urban_walk">Urban walk</string>
+
+    <string name="length_short">5</string>
+    <string name="length_medium">8</string>
+    <string name="length_long">12</string>
+
+    <string name="age_4_to_6">4–6</string>
+    <string name="age_7_to_9">7–9</string>
+    <string name="age_10_plus">10+</string>
+
+    <string name="hunt_loading_model">Waking up the AI…</string>
+    <string name="hunt_writing_list">Writing your hunt list…</string>
+    <string name="hunt_wait_hint">It all happens on this phone, with no internet. It takes a few seconds.</string>
+    <string name="hunt_ready_title">Your hunt</string>
+    <string name="hunt_tap_hint">Found something? Tap it on the list and take a photo.</string>
+    <string name="hunt_item_found">Found</string>
+    <string name="hunt_error_model_missing">The AI model is not on this phone yet.</string>
+    <string name="hunt_error_generic">Something went wrong while making your hunt.</string>
+    <string name="hunt_retry">Try again</string>
+    <string name="hunt_item_numbered" translatable="false">%1$d. %2$s</string>
+
+    <string name="verify_looking_for">Looking for: %1$s</string>
+    <string name="verify_take_photo">Take photo</string>
+    <string name="verify_permission_title">Camera access</string>
+    <string name="verify_permission_body">Nature Quest uses the camera only to check your photos. They never leave this phone.</string>
+    <string name="verify_permission_allow">Allow camera</string>
+    <string name="verify_permission_settings">Open settings</string>
+    <string name="verify_camera_error">The camera could not start.</string>
+    <string name="verify_checking">Checking your photo…</string>
+    <string name="verify_checking_hint">It happens on this phone, with no internet. It takes a few seconds.</string>
+    <string name="verify_result_match">You found it!</string>
+    <string name="verify_result_no_match">Not this time</string>
+    <string name="verify_result_not_sure">Hmm…</string>
+    <string name="verify_hint">Tip: %1$s</string>
+    <string name="verify_try_again">Try again</string>
+    <string name="verify_back_to_list">Back to the list</string>
+    <string name="verify_photo_description">The photo you took</string>
+    <string name="verify_error_generic">Something went wrong while checking your photo.</string>
+    <!-- Used instead of the AI's own words when it gives no usable answer or says something unsafe. -->
+    <string name="verify_fallback_not_sure">I\'m not sure about that one. Try another photo!</string>
+    <string name="verify_fallback_match">Great find!</string>
+    <string name="verify_fallback_miss">Not quite. Try another photo!</string>
+
+    <string name="hunt_finish">Finish hunt</string>
+    <string name="hunt_read_aloud">Read the list aloud</string>
+    <string name="hunt_stop_reading">Stop reading</string>
+    <string name="hunt_leave_title">Leave the hunt?</string>
+    <string name="hunt_leave_body">Your progress and photos will be deleted.</string>
+    <string name="hunt_leave_confirm">Leave</string>
+    <string name="hunt_leave_stay">Stay</string>
+
+    <string name="summary_title">Hunt complete!</string>
+    <string name="summary_empty">There is no hunt to show.</string>
+    <string name="summary_done">Done</string>
+    <string name="summary_not_found">Not found</string>
+    <string name="summary_save">Save photos to gallery</string>
+    <string name="summary_save_failed">Could not save the photos.</string>
+    <plurals name="summary_saved">
+        <item quantity="one">Saved %d photo to your gallery.</item>
+        <item quantity="other">Saved %d photos to your gallery.</item>
+    </plurals>
+    <string name="summary_found">You found %1$d of %2$d</string>
+    <string name="summary_time_under_a_minute">Less than a minute outside</string>
+    <plurals name="summary_time_minutes">
+        <item quantity="one">%d minute outside</item>
+        <item quantity="other">%d minutes outside</item>
+    </plurals>
+    <string name="summary_time_hours">%1$d h %2$d min outside</string>
+    <string name="medal_gold">Gold medal</string>
+    <string name="medal_silver">Silver medal</string>
+    <string name="medal_bronze">Bronze medal</string>
+
+    <!-- Read aloud by the phone\'s speech engine. -->
+    <string name="speech_hunt_ready">Your hunt is ready! Put the phone away and go look for these things, always with an adult: %1$s Have fun!</string>
+    <string name="speech_summary">Hunt complete! You found %1$d of %2$d. %3$s. You earned a %4$s!</string>
+
+    <string name="setup_model_needed">To make hunts, this phone needs the AI model. It is a one-time download.</string>
+    <string name="setup_download_model">Download the AI model</string>
+
+    <string name="download_title">Get the AI model</string>
+    <string name="download_body">Nature Quest uses an AI that runs on your phone, so it works even with no signal. It needs a one-time download of %1$s. Your photos and hunts never leave the phone.</string>
+    <string name="download_wifi">Wi-Fi is recommended.</string>
+    <string name="download_metered">You are on a metered connection, such as mobile data. This is a large download.</string>
+    <string name="download_start">Download</string>
+    <string name="download_continue">Continue download</string>
+    <string name="download_partial">%1$s already downloaded.</string>
+    <string name="download_downloading">Downloading…</string>
+    <string name="download_progress">%1$s of %2$s (%3$d%%)</string>
+    <string name="download_verifying">Checking the file…</string>
+    <string name="download_done_title">The AI is ready!</string>
+    <string name="download_done_button">Continue</string>
+    <string name="download_error_network">The connection was lost. You can continue where it stopped.</string>
+    <string name="download_error_space">There is not enough free space on this phone.</string>
+    <string name="download_error_server">The download server did not answer correctly. Try again later.</string>
+    <string name="download_error_corrupt">The downloaded file was damaged, so it was deleted. Please download it again.</string>
+
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+
+    <!-- Safe built-in items, used if the AI cannot make enough valid ones. Photograph only: never pick or touch. -->
+    <string-array name="fallback_hunt_items">
+        <item>A red leaf</item>
+        <item>Something with a spiral shape</item>
+        <item>A feather</item>
+        <item>Bark with moss on it</item>
+        <item>A flower with five petals</item>
+        <item>A yellow or orange leaf</item>
+        <item>Something perfectly round</item>
+        <item>A tree with very rough bark</item>
+        <item>A leaf with pointy edges</item>
+        <item>A cloud with an interesting shape</item>
+        <item>Something blue</item>
+        <item>A smooth gray stone</item>
+        <item>A very tall tree</item>
+        <item>Branches making a pattern against the sky</item>
+    </string-array>
+</resources>

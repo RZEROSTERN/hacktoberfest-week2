@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- The only network use in the app: the one-time download of the AI model (see ModelDownloader).
+         Nothing the player does, no photo and no hunt, is ever sent anywhere. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Used only to check the player's photos on the phone. Photos are never uploaded. -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <!-- Android 11+: lets the app find the phone's speech engine to read hunts and feedback aloud. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".NatureQuestApp"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.NatureQuest">
+        <!-- Required by LiteRT-LM to use the GPU backend (official Android setup). -->
+        <uses-native-library
+            android:name="libvndksupport.so"
+            android:required="false" />
+        <uses-native-library
+            android:name="libOpenCL.so"
+            android:required="false" />
+        <!-- Portrait only: one hand, outdoors. It also keeps camera photo rotation simple. Android 16 ignores
+             this lock only on large screens (tablets, foldables unfolded), which are not the target. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity,DiscouragedApi">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

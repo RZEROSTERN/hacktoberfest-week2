@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="setup_title">¿Listos para una búsqueda en la naturaleza?</string>
+    <string name="setup_adult_notice">Siempre con un adulto. Solo miren y tomen fotos: nunca corten ni toquen nada.</string>
+    <string name="setup_place_title">¿A dónde van?</string>
+    <string name="setup_length_title">¿Cuántas cosas quieren encontrar?</string>
+    <string name="setup_age_title">Edad del jugador más pequeño</string>
+    <string name="setup_start">Empezar búsqueda</string>
+
+    <string name="place_park">Parque</string>
+    <string name="place_forest">Bosque</string>
+    <string name="place_garden">Jardín</string>
+    <string name="place_urban_walk">Paseo urbano</string>
+
+    <string name="length_short">5</string>
+    <string name="length_medium">8</string>
+    <string name="length_long">12</string>
+
+    <string name="age_4_to_6">4–6</string>
+    <string name="age_7_to_9">7–9</string>
+    <string name="age_10_plus">10+</string>
+
+    <string name="hunt_loading_model">Despertando a la IA…</string>
+    <string name="hunt_writing_list">Escribiendo su lista…</string>
+    <string name="hunt_wait_hint">Todo pasa en este teléfono, sin internet. Tarda unos segundos.</string>
+    <string name="hunt_ready_title">Su búsqueda</string>
+    <string name="hunt_tap_hint">¿Encontraron algo? Tóquenlo en la lista y tomen una foto.</string>
+    <string name="hunt_item_found">Encontrado</string>
+    <string name="hunt_error_model_missing">El modelo de IA todavía no está en este teléfono.</string>
+    <string name="hunt_error_generic">Algo salió mal al preparar la búsqueda.</string>
+    <string name="hunt_retry">Intentar de nuevo</string>
+
+    <string name="verify_looking_for">Buscando: %1$s</string>
+    <string name="verify_take_photo">Tomar foto</string>
+    <string name="verify_permission_title">Acceso a la cámara</string>
+    <string name="verify_permission_body">Nature Quest usa la cámara solo para revisar sus fotos. Nunca salen de este teléfono.</string>
+    <string name="verify_permission_allow">Permitir cámara</string>
+    <string name="verify_permission_settings">Abrir ajustes</string>
+    <string name="verify_camera_error">No se pudo iniciar la cámara.</string>
+    <string name="verify_checking">Revisando su foto…</string>
+    <string name="verify_checking_hint">Pasa en este teléfono, sin internet. Tarda unos segundos.</string>
+    <string name="verify_result_match">¡Lo encontraron!</string>
+    <string name="verify_result_no_match">Esta vez no</string>
+    <string name="verify_result_not_sure">Mmm…</string>
+    <string name="verify_hint">Pista: %1$s</string>
+    <string name="verify_try_again">Intentar de nuevo</string>
+    <string name="verify_back_to_list">Volver a la lista</string>
+    <string name="verify_photo_description">La foto que tomaron</string>
+    <string name="verify_error_generic">Algo salió mal al revisar su foto.</string>
+    <!-- Se usa en lugar de las palabras de la IA cuando no da una respuesta útil o dice algo inseguro. -->
+    <string name="verify_fallback_not_sure">No estoy seguro de esa. ¡Prueben con otra foto!</string>
+    <string name="verify_fallback_match">¡Buen hallazgo!</string>
+    <string name="verify_fallback_miss">Casi. ¡Prueben con otra foto!</string>
+
+    <string name="hunt_finish">Terminar búsqueda</string>
+    <string name="hunt_read_aloud">Leer la lista en voz alta</string>
+    <string name="hunt_stop_reading">Dejar de leer</string>
+    <string name="hunt_leave_title">¿Salir de la búsqueda?</string>
+    <string name="hunt_leave_body">Se borrarán su progreso y sus fotos.</string>
+    <string name="hunt_leave_confirm">Salir</string>
+    <string name="hunt_leave_stay">Seguir</string>
+
+    <string name="summary_title">¡Búsqueda completa!</string>
+    <string name="summary_empty">No hay ninguna búsqueda que mostrar.</string>
+    <string name="summary_done">Listo</string>
+    <string name="summary_not_found">No encontrado</string>
+    <string name="summary_save">Guardar fotos en la galería</string>
+    <string name="summary_save_failed">No se pudieron guardar las fotos.</string>
+    <plurals name="summary_saved">
+        <item quantity="one">Se guardó %d foto en su galería.</item>
+        <item quantity="many">Se guardaron %d fotos en su galería.</item>
+        <item quantity="other">Se guardaron %d fotos en su galería.</item>
+    </plurals>
+    <string name="summary_found">Encontraron %1$d de %2$d</string>
+    <string name="summary_time_under_a_minute">Menos de un minuto afuera</string>
+    <plurals name="summary_time_minutes">
+        <item quantity="one">%d minuto afuera</item>
+        <item quantity="many">%d minutos afuera</item>
+        <item quantity="other">%d minutos afuera</item>
+    </plurals>
+    <string name="summary_time_hours">%1$d h %2$d min afuera</string>
+    <string name="medal_gold">Medalla de oro</string>
+    <string name="medal_silver">Medalla de plata</string>
+    <string name="medal_bronze">Medalla de bronce</string>
+
+    <!-- Lo lee en voz alta el motor de voz del teléfono. -->
+    <string name="speech_hunt_ready">¡Su búsqueda está lista! Guarden el teléfono y vayan a buscar estas cosas, siempre con un adulto: %1$s ¡Diviértanse!</string>
+    <string name="speech_summary">¡Búsqueda completa! Encontraron %1$d de %2$d. %3$s. ¡Ganaron la %4$s!</string>
+
+    <string name="setup_model_needed">Para crear búsquedas, este teléfono necesita el modelo de IA. Es una descarga única.</string>
+    <string name="setup_download_model">Descargar el modelo de IA</string>
+
+    <string name="download_title">Descargar el modelo de IA</string>
+    <string name="download_body">Nature Quest usa una IA que funciona en su teléfono, así que sirve aunque no haya señal. Necesita una descarga única de %1$s. Sus fotos y búsquedas nunca salen del teléfono.</string>
+    <string name="download_wifi">Se recomienda usar Wi-Fi.</string>
+    <string name="download_metered">Están en una conexión con límite de datos, como los datos móviles. Es una descarga grande.</string>
+    <string name="download_start">Descargar</string>
+    <string name="download_continue">Continuar descarga</string>
+    <string name="download_partial">Ya se descargaron %1$s.</string>
+    <string name="download_downloading">Descargando…</string>
+    <string name="download_progress">%1$s de %2$s (%3$d%%)</string>
+    <string name="download_verifying">Revisando el archivo…</string>
+    <string name="download_done_title">¡La IA está lista!</string>
+    <string name="download_done_button">Continuar</string>
+    <string name="download_error_network">Se perdió la conexión. Pueden continuar desde donde se quedó.</string>
+    <string name="download_error_space">No hay suficiente espacio libre en este teléfono.</string>
+    <string name="download_error_server">El servidor de descarga no respondió bien. Intenten más tarde.</string>
+    <string name="download_error_corrupt">El archivo descargado estaba dañado, así que se borró. Descárguenlo de nuevo.</string>
+
+    <string name="action_back">Atrás</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Elementos seguros incluidos, por si la IA no logra hacer suficientes. Solo fotos: nunca cortar ni tocar. -->
+    <string-array name="fallback_hunt_items">
+        <item>Una hoja roja</item>
+        <item>Algo con forma de espiral</item>
+        <item>Una pluma</item>
+        <item>Corteza con musgo</item>
+        <item>Una flor con cinco pétalos</item>
+        <item>Una hoja amarilla o naranja</item>
+        <item>Algo perfectamente redondo</item>
+        <item>Un árbol con la corteza muy rugosa</item>
+        <item>Una hoja con las puntas afiladas</item>
+        <item>Una nube con una forma interesante</item>
+        <item>Algo azul</item>
+        <item>Una piedra lisa y gris</item>
+        <item>Un árbol muy alto</item>
+        <item>Ramas formando un dibujo contra el cielo</item>
+    </string-array>
+</resources>
