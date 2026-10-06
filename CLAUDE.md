@@ -53,6 +53,7 @@ Needs JDK 17+ (see Gotchas).
 - A finished hunt belongs to the summary screen, which clears the session and photo cache; `HuntViewModel.onCleared` must only clear an unfinished hunt.
 - The model download pins a Hugging Face revision, size and SHA-256 in `ModelSpec`; if the model changes, update all three together (D-029). To test it on the phone, move the pushed model aside first (`run-as mx.dev1.naturequest mv files/gemma-4-E2B-it.litertlm files/model.bak`).
 - Signed release APK: `./gradlew assembleRelease` signs only if the git-ignored `keystore.properties` exists (see `keystore.properties.example` and D-031); never commit it. A release-signed app cannot be installed over a debug one: uninstall first (that also deletes the downloaded model).
+- Languages: only English (default) and Spanish. Never pass a raw `Locale` to a prompt or the voice: use `AppLanguage.resolve` so unsupported phone languages fall back to English everywhere (D-032). A new language also needs safety word lists and an entry in `locales_config.xml`.
 - Android regex (ICU) throws on a bare `}` that the JVM accepts. Escape both braces; JVM unit tests will not catch it.
 - On the Pixel 10 the CPU backend beats GPU, decode is only ~7-23 tok/s, and the phone slows ~1.6x under sustained load. Keep model output short and benchmark in the slow state.
 - `.litertlm` files, keystores and `local.properties` are gitignored. Never commit them.

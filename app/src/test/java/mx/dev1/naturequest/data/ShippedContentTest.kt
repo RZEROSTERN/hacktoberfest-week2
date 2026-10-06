@@ -3,6 +3,7 @@ package mx.dev1.naturequest.data
 import mx.dev1.naturequest.data.prompts.PromptTemplate
 import mx.dev1.naturequest.domain.hunt.HuntLength
 import mx.dev1.naturequest.domain.hunt.SafetyValidator
+import mx.dev1.naturequest.domain.language.AppLanguage
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -106,6 +107,19 @@ class ShippedContentTest {
     fun `the invitation always mentions going with an adult`() {
         assertTrue(stringValue("src/main/res/values/strings.xml", "speech_hunt_ready").contains("adult"))
         assertTrue(stringValue("src/main/res/values-es/strings.xml", "speech_hunt_ready").contains("adulto"))
+    }
+
+    @Test
+    fun `the per-app language list matches the translations and languages that ship`() {
+        val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file("src/main/res/xml/locales_config.xml"))
+        val listed = (0 until document.getElementsByTagName("locale").length)
+            .map { (document.getElementsByTagName("locale").item(it) as org.w3c.dom.Element).getAttribute("android:name") }
+            .toSet()
+        val translationFolders = file("src/main/res").listFiles { f -> f.isDirectory && Regex("values-[a-z]{2}").matches(f.name) }
+            .orEmpty().map { it.name.removePrefix("values-") }.toSet()
+
+        assertEquals("Every translation folder must be offered in Android's App languages", translationFolders + "en", listed)
+        assertEquals("AppLanguage must list the same languages", AppLanguage.entries.map { it.code }.toSet(), listed)
     }
 
     @Test

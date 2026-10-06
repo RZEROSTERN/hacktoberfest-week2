@@ -1,6 +1,7 @@
 package mx.dev1.naturequest.domain.hunt
 
 import mx.dev1.naturequest.domain.inference.InferenceEngine
+import mx.dev1.naturequest.domain.language.AppLanguage
 import mx.dev1.naturequest.domain.inference.InferenceRequest
 import mx.dev1.naturequest.domain.inference.ModelJsonParser
 import mx.dev1.naturequest.domain.prompt.PromptSource
@@ -71,7 +72,7 @@ class GenerateHuntUseCase @Inject constructor(
                         "place" to settings.place.promptName,
                         "month" to date.month.getDisplayName(TextStyle.FULL, Locale.ENGLISH),
                         "age_range" to settings.ageRange.promptName,
-                        "language" to locale.getDisplayLanguage(Locale.ENGLISH),
+                        "language" to AppLanguage.resolve(locale).promptName,
                         "avoid" to avoidList(accepted, rejected),
                     ),
                 )

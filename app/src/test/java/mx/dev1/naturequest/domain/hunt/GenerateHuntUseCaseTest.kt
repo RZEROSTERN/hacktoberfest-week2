@@ -175,6 +175,17 @@ class GenerateHuntUseCaseTest {
     }
 
     @Test
+    fun `asks for English on a phone whose language the app does not support`() = runTest {
+        // The screens fall back to English there, and the safety word lists only know English and Spanish,
+        // so the model must not be asked to write in French.
+        val engine = FakeInferenceEngine.scripted(huntJson("a", "b", "c", "d", "e", "f", "g"))
+
+        useCase(engine)(settings, locale = Locale.forLanguageTag("fr-FR"))
+
+        assertEquals("English", prompts.rendered.first().second["language"])
+    }
+
+    @Test
     fun `reports progress while loading and writing`() = runTest {
         val progress = mutableListOf<HuntGenerationProgress>()
         useCase(FakeInferenceEngine.scripted(huntJson("a", "b", "c", "d", "e", "f", "g")))(

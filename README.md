@@ -32,7 +32,34 @@ Built for the **DEV Hacktoberfest Open-Source AI Challenge, Week 1: "Touch Grass
 
 Families and kids on a walk, with an adult. The UI is made to be used in a few seconds: big tap targets, a high-contrast
 palette for sunlight, one main action per screen, and everything is read aloud so nobody has to look at the phone.
-It is in **English and Spanish** and follows the device language, including what the AI writes and says.
+It is in **English and Spanish** (see [Languages](#languages)).
+
+## Languages
+
+Nature Quest is fully available in **English** (the default) and **Spanish**. The language covers everything the player
+meets: the screens, the hunt items the AI writes, its feedback and hints, the voice that reads them aloud, and the safety
+check that screens the items.
+
+- It follows the phone's language. On **Android 13 or newer** you can also set it for this app only: *Settings > System >
+  Languages > App languages > Nature Quest* (English or Español). On Android 12 it follows the phone's language.
+- A phone set to any **other language gets the English app**, with English hunts and an English voice, so the screens, the AI and
+  the safety check always agree.
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/es-01-setup.png" width="190" alt="Pantalla de inicio en español"></td>
+    <td><img src="docs/screenshots/es-03-hunt-list.png" width="190" alt="Lista de la búsqueda en español"></td>
+    <td><img src="docs/screenshots/es-04-summary.png" width="190" alt="Resumen con medalla en español"></td>
+  </tr>
+  <tr>
+    <td align="center">Inicio</td>
+    <td align="center">La búsqueda, escrita por la IA</td>
+    <td align="center">Medalla y tiempo afuera</td>
+  </tr>
+</table>
+
+Adding another language means translating the strings and fallback hunt items, adding prompt examples and safety word lists
+for it, and listing it in `res/xml/locales_config.xml`; a test fails if those lists disagree.
 
 ## How it works
 
@@ -80,7 +107,7 @@ adb push gemma-4-E2B-it.litertlm /data/local/tmp/ && adb shell "run-as mx.dev1.n
 You need JDK 17+, the Android SDK with platform 37, and a phone (the model does not run on emulators).
 
 ```bash
-./gradlew assembleDebug lintDebug testDebugUnitTest   # build, lint and 148 unit tests
+./gradlew assembleDebug lintDebug testDebugUnitTest   # build, lint and 154 unit tests
 ./gradlew installDebug                                  # install on the connected phone
 ```
 
@@ -130,7 +157,7 @@ flowchart LR
 - **Strict JSON** from the model is parsed with kotlinx.serialization; invalid output is retried once and then replaced by a
   safe default ("I'm not sure, try another photo", or a built-in hunt list).
 - **Prompts** are versioned files in `app/src/main/assets/prompts/`, never inline in Kotlin.
-- **Decisions** are logged with their reasons in [`docs/DECISIONS.md`](docs/DECISIONS.md) (30 entries).
+- **Decisions** are logged with their reasons in [`docs/DECISIONS.md`](docs/DECISIONS.md) (32 entries).
 
 ### What the spike taught us
 
@@ -187,7 +214,7 @@ Being honest about what has and has not been checked:
 - **Photo-check accuracy has not been measured.** The pipeline is verified end to end on a phone, but there was no set of
   real photos to score the model against. Treat the verdicts as "fun and encouraging", not as a reliable judge.
 - Tested on **one phone** (Pixel 10). Speed, memory and the speech voice will differ elsewhere.
-- Spanish and English both ran on the device; Spanish got more testing.
+- Spanish and English both ran on the device; Spanish got more testing. Other languages fall back to English (checked on the device with the app set to French).
 - The history of past hunts (a stretch goal) was not built.
 
 ## Built with

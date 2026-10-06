@@ -2,6 +2,7 @@ package mx.dev1.naturequest.domain.verification
 
 import mx.dev1.naturequest.domain.hunt.SafetyValidator
 import mx.dev1.naturequest.domain.inference.InferenceEngine
+import mx.dev1.naturequest.domain.language.AppLanguage
 import mx.dev1.naturequest.domain.inference.InferenceRequest
 import mx.dev1.naturequest.domain.inference.ModelJsonParser
 import mx.dev1.naturequest.domain.inference.VerificationResponse
@@ -34,7 +35,7 @@ class VerifyPhotoUseCase @Inject constructor(
     ): PhotoVerification {
         val prompt = prompts.render(
             PROMPT_NAME,
-            mapOf("item" to item, "language" to locale.getDisplayLanguage(Locale.ENGLISH)),
+            mapOf("item" to item, "language" to AppLanguage.resolve(locale).promptName),
         )
         try {
             engine.load()
