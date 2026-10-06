@@ -18,3 +18,4 @@ paths:
 - Release the engine when it is not needed (hunt over, app backgrounded, ViewModel cleared). It holds gigabytes of memory.
 - Photos are handled in memory and are never uploaded. This layer makes no network calls except the model download.
 - Check the official LiteRT-LM docs before using its API. Do not guess.
+- The language of a prompt or a voice comes from `AppLanguage.resolve(locale)`, never from the raw device locale: the safety word lists only cover English and Spanish.
