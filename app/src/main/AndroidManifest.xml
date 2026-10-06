@@ -25,9 +25,11 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
+        android:localeConfig="@xml/locales_config"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NatureQuest">
+        android:theme="@style/Theme.NatureQuest"
+        tools:targetApi="33">
         <!-- Required by LiteRT-LM to use the GPU backend (official Android setup). -->
         <uses-native-library
             android:name="libvndksupport.so"

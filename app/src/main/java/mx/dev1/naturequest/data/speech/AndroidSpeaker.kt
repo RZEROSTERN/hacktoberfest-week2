@@ -9,6 +9,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import mx.dev1.naturequest.domain.language.AppLanguage
 import mx.dev1.naturequest.domain.speech.Speaker
 import java.util.Locale
 import javax.inject.Inject
@@ -85,10 +86,16 @@ class AndroidSpeaker @Inject constructor(
         pending = null
     }
 
-    /** Uses the device language, falling back to the language without its region (es-MX -> es). */
+    /**
+     * Speaks the app's language: the device language (keeping its region, e.g. es-MX) when the app supports
+     * it, otherwise the fallback language, so the voice always matches the text on screen.
+     */
     private fun selectLanguage(tts: TextToSpeech): Boolean {
         val device = Locale.getDefault()
-        return listOf(device, Locale(device.language)).any { locale ->
+        val language = AppLanguage.resolve(device)
+        val base = Locale.forLanguageTag(language.code)
+        val preferred = if (device.language == language.code) device else base
+        return listOf(preferred, base).any { locale ->
             when (tts.setLanguage(locale)) {
                 TextToSpeech.LANG_MISSING_DATA, TextToSpeech.LANG_NOT_SUPPORTED -> false
                 else -> true
@@ -100,7 +107,7 @@ class AndroidSpeaker @Inject constructor(
     private fun preferOfflineVoice(tts: TextToSpeech) {
         val current = tts.voice
         if (current != null && !current.isNetworkConnectionRequired) return
-        val language = Locale.getDefault().language
+        val language = AppLanguage.resolve(Locale.getDefault()).code
         tts.voices
             ?.filter { it.locale.language == language && !it.isNetworkConnectionRequired }
             ?.maxByOrNull { it.quality }

@@ -73,6 +73,15 @@ class VerifyPhotoUseCaseTest {
     }
 
     @Test
+    fun `answers in English on a phone whose language the app does not support`() = runTest {
+        val engine = FakeInferenceEngine.scripted(verificationJson(true, "Nice!"))
+
+        useCase(engine)("a red leaf", photo, Locale.forLanguageTag("pt-BR"))
+
+        assertEquals("English", prompts.rendered.single().second["language"])
+    }
+
+    @Test
     fun `retries once with a different seed after invalid output`() = runTest {
         val engine = FakeInferenceEngine.scripted("I think it is a leaf.", verificationJson(true, "Great find!"))
 
