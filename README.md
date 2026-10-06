@@ -107,7 +107,7 @@ adb push gemma-4-E2B-it.litertlm /data/local/tmp/ && adb shell "run-as mx.dev1.n
 You need JDK 17+, the Android SDK with platform 37, and a phone (the model does not run on emulators).
 
 ```bash
-./gradlew assembleDebug lintDebug testDebugUnitTest   # build, lint and 148 unit tests
+./gradlew assembleDebug lintDebug testDebugUnitTest   # build, lint and 154 unit tests
 ./gradlew installDebug                                  # install on the connected phone
 ```
 
